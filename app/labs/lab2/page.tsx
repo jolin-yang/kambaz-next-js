@@ -46,7 +46,7 @@ export default function Lab2() {
         Instead of using IDs to refer to elements, you can use an element's CLASS attribute </p>
         <h4 className="wd-class-selector">
         This heading has same style as paragraph above </h4>
-      </div>
+      </div><br />
       <div id="wd-css-document-structure">
         <div className="wd-selector-1">
           <h3>Document structure selectors</h3>
@@ -66,19 +66,28 @@ export default function Lab2() {
         </div>
       </div>
     </div>
+    <br />
     <ForegroundColors />
     <BackgroundColors />
+    <br />
     <Borders />
+    <br />
     <Padding />
+    <br />
     <Margins />
     <Corners />
-    <Dimensions />
+    <br />
+    <Dimensions />  
+    <br />
     <Positions />
+    <br />
     <Zindex/>
     <Float />
+    <br />
     <GridLayout />
-    <br /><br /><br /><br /><br />
+    <br /><br /><br /><br />
     <Flex />
+    <br />
     <MediaQueriesDemo />
     <ReactIconsSampler />
     <div>
