@@ -15,7 +15,7 @@ export default function TailwindGrids() {
             <div className="text-center bg-blue-300 p-3">08</div>
             <div className="text-center bg-blue-300 p-3">09</div>
           </div>
-        </div>
+        </div><br />
         <div>
           <h3 className="mt-6 text-3xl font-bold">3 Columns Grid</h3>
           <div className="grid grid-cols-3 gap-4">
