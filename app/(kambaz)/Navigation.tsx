@@ -11,7 +11,7 @@ export default function KambazNavigation() {
         className="rounded-0 position-fixed bottom-0 top-0 d-none d-md-block bg-black z-2">
      <ListGroupItem className="bg-black border-0 text-center" as="a"
               target="_blank" href="https://www.northeastern.edu/" id="wd-neu-link">
-       <img src="/images/NEU.png" width="75px" alt="Northeastern University" />
+       <img src="/images/neu.png" width="75px" alt="Northeastern University" />
      </ListGroupItem>
      <ListGroupItem className="border-0 bg-black text-center">
        <Link href="/account" id="wd-account-link" className="text-white text-decoration-none">
