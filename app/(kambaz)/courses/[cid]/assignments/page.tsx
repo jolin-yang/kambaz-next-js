@@ -30,7 +30,8 @@ export default function Assignments() {
                     </div>
                     <div className="me-5">
                       <div className="fw-bold">
-                        <Link href="/courses/1234/assignments/123">
+                        <Link href="/courses/1234/assignments/123"
+                        className="text-dark text-decoration-none">
                         A1
                         </Link>
                       </div>
@@ -60,7 +61,8 @@ export default function Assignments() {
                     </div>
                     <div className="me-5">
                       <div className="fw-bold">
-                          <Link href="/courses/1234/assignments/123">
+                          <Link href="/courses/1234/assignments/123"
+                          className="text-dark text-decoration-none">
                           A2
                           </Link>
                       </div>
@@ -90,7 +92,8 @@ export default function Assignments() {
                     </div>
                     <div className="me-5">
                       <div className="fw-bold">
-                          <Link href="/courses/1234/assignments/123">
+                          <Link href="/courses/1234/assignments/123"
+                          className="text-dark text-decoration-none">
                           A3
                           </Link>
                         </div>
