@@ -1,9 +1,6 @@
 import Link from "next/link";
-import { Button, FormControl, InputGroup, ListGroup, ListGroupItem } from "react-bootstrap";
-import { BsGripVertical, BsSearch } from "react-icons/bs";
-import LessonControlButtons from "../modules/LessonControlButtons";
-import ModuleControlButtons from "../modules/ModuleControlButtons";
-import { CiSearch } from "react-icons/ci";
+import { ListGroup, ListGroupItem } from "react-bootstrap";
+import { BsGripVertical } from "react-icons/bs";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import AssignmentControls from "./AssignmentControls";
 import AssignmentControlButtons from "./AssignmentControlButtons";
@@ -32,7 +29,11 @@ export default function Assignments() {
                       <GreenAssignmentIcon/> 
                     </div>
                     <div className="me-5">
-                      <div className="fw-bold">A1</div>
+                      <div className="fw-bold">
+                        <Link href="/courses/1234/assignments/123">
+                        A1
+                        </Link>
+                      </div>
                         <div className="fs-6">
                           <div>
                             <span className="text-danger"> Multiple Modules </span>
@@ -58,7 +59,11 @@ export default function Assignments() {
                       <GreenAssignmentIcon/> 
                     </div>
                     <div className="me-5">
-                      <div className="fw-bold">A2</div>
+                      <div className="fw-bold">
+                          <Link href="/courses/1234/assignments/123">
+                          A2
+                          </Link>
+                      </div>
                         <div className="fs-6">
                           <div>
                             <span className="text-danger"> Multiple Modules </span>
@@ -84,7 +89,11 @@ export default function Assignments() {
                       <GreenAssignmentIcon/> 
                     </div>
                     <div className="me-5">
-                      <div className="fw-bold">A3</div>
+                      <div className="fw-bold">
+                          <Link href="/courses/1234/assignments/123">
+                          A3
+                          </Link>
+                        </div>
                         <div className="fs-6">
                           <div>
                             <span className="text-danger"> Multiple Modules </span>
