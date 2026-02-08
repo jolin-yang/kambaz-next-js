@@ -6,7 +6,7 @@ import LessonControlButtons from "./LessonControlButtons";
 
 export default function Modules() {
     return (
-      <div>
+      <div className="pt-3">
           <ModulesControls /><br /><br /><br /><br />
           <ListGroup className="rounded-0" id="wd-modules">
             <ListGroupItem className="wd-module p-0 mb-5 fs-5 border-gray">

@@ -2,7 +2,7 @@ import Modules from "../modules/page";
 import CourseStatus from "./Status";
 export default function Home() {
  return (
-   <div id="wd-home" className="pt-3">
+   <div id="wd-home">
     <div className="d-flex" id="wd-home">
       <div className="flex-fill me-5">
         <Modules /> 
