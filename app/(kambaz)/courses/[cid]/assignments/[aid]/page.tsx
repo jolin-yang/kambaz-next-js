@@ -44,11 +44,11 @@ export default function AssignmentEditor() {
                   Online Entry Options
                 </div>
                 <div>
-                  <FormCheck className="mb-4" type="checkbox" label="Text Entry"/>
-                  <FormCheck className="mb-4"type="checkbox" label="Website URL" defaultChecked/>
-                  <FormCheck className="mb-4"type="checkbox" label="Media Recordings"/>                  
-                  <FormCheck className="mb-4"type="checkbox" label="Student Annotation"/>
-                  <FormCheck className="mb-3"type="checkbox" label="File Uploads"/>
+                  <FormCheck className="mb-4" id="text-entry" type="checkbox" label="Text Entry"/>
+                  <FormCheck className="mb-4" id="url" type="checkbox" label="Website URL" defaultChecked/>
+                  <FormCheck className="mb-4" id="media" type="checkbox" label="Media Recordings"/>                  
+                  <FormCheck className="mb-4" id="annotation" type="checkbox" label="Student Annotation"/>
+                  <FormCheck className="mb-3" id="file" type="checkbox" label="File Uploads"/>
                 </div>
               </div>
             </Col>

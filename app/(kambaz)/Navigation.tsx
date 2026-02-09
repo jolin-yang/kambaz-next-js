@@ -49,11 +49,11 @@ export default function KambazNavigation() {
        </Link>
      </ListGroupItem>
      <ListGroupItem className="border-0 bg-black text-center">
-       <Link href="/labs" id="wd-labs-link" className="text-white text-decoration-none">
+       <NavLink href="/labs" id="wd-labs-link" className="text-white text-decoration-none">
          <LiaCogSolid className="fs-1 text-danger" />
          <br />
          Labs
-       </Link>
+       </NavLink>
      </ListGroupItem>
    </ListGroup>
 );}
