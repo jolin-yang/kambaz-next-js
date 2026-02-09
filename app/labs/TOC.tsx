@@ -1,25 +1,28 @@
+"use client";
+
 import { Nav, NavItem, NavLink } from "react-bootstrap";
 import Link from "next/link";
+
 export default function TOC() {
  return (
    <Nav variant="pills">
      <NavItem>
-       <NavLink href="/labs">Labs</NavLink>
+       <NavLink href="/labs" as={Link}>Labs</NavLink>
      </NavItem>
      <NavItem>
-       <NavLink href="/labs/lab1">Lab 1</NavLink>
+       <NavLink href="/labs/lab1" as={Link}>Lab 1</NavLink>
      </NavItem>
      <NavItem>
-       <NavLink href="/labs/lab2">Lab 2</NavLink>
+       <NavLink href="/labs/lab2" as={Link}>Lab 2</NavLink>
      </NavItem>
      <NavItem>
-       <NavLink href="/labs/lab3">Lab 3</NavLink>
+       <NavLink href="/labs/lab3" as={Link}>Lab 3</NavLink>
      </NavItem>
      <NavItem>
-       <NavLink href="/">Kambaz</NavLink>
+       <NavLink href="/" as={Link}>Kambaz</NavLink>
      </NavItem>
      <NavItem>
-       <NavLink href="https://github.com/jolin-yang/kambaz-next-js/tree/a2">My GitHub</NavLink>
+       <NavLink href="https://github.com/jolin-yang/kambaz-next-js/tree/a2" id="wd-github">My GitHub</NavLink>
      </NavItem>
    </Nav>
 );}
