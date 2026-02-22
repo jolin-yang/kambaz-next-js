@@ -1,6 +1,6 @@
 "use client"
 
-import { FormLabel, FormControl, Form, Col, Row, FormSelect, FormCheck, Button } from "react-bootstrap";
+import { FormLabel, FormControl, Form, Col, Row, FormSelect, FormCheck } from "react-bootstrap";
 import { useParams } from "next/navigation";
 import * as db from "../../../../database";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export default function AssignmentEditor() {
         <div className="px-5">
         <Form>
           <FormLabel>Assignment Name</FormLabel>
-          <FormControl defaultValue={assignment.title}/><br />
+          <FormControl defaultValue={assignment?.title}/><br />
           <FormControl as="textarea" rows={8} /><br />
           <Row className="mb-4 ms-5">
             <FormLabel column sm={2} className="text-end"> Points </FormLabel>
