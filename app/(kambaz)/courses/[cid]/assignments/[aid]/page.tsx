@@ -9,17 +9,33 @@ export default function AssignmentEditor() {
   const { cid, aid } = useParams();
   const assignment = db.assignments.find(a => a._id === aid);
 
+  const availableDate = assignment?.available_date;
+  const formattedAvailableDate = new Date(availableDate?.split(" at")[0] + " 2026");
+  const properAvailableDateFormat = formattedAvailableDate.toISOString().slice(0, 10);
+  const dueDate = assignment?.due_date;
+  const formattedDueDate = new Date(dueDate?.split(" at")[0] + " 2026");
+  const properDueDateFormat = formattedDueDate.toISOString().slice(0, 10);
+
+  // function formatDate(str, year = 2026) {
+  //   const [monthStr, dayPart] = str.split(" ");
+  //   const months = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+  //   return new Date(year, months[monthStr], parseInt(dayPart)).toISOString().slice(0,10);
+  // }
+  
+  // const properAvailableDateFormat = formatDate(assignment.available_date);
+  // const properDueDateFormat = formatDate(assignment.due_date);
+
     return (
       <div className="px-5 pt-3">
         <div className="px-5">
         <Form>
           <FormLabel>Assignment Name</FormLabel>
           <FormControl defaultValue={assignment?.title}/><br />
-          <FormControl as="textarea" rows={8} /><br />
+          <FormControl as="textarea" rows={8} defaultValue={assignment?.description}/><br />
           <Row className="mb-4 ms-5">
             <FormLabel column sm={2} className="text-end"> Points </FormLabel>
             <Col sm={10}>
-                <FormControl type="number" defaultValue="100" />
+                <FormControl type="number" defaultValue={assignment?.points} />
             </Col>
           </Row>
           <Row className="mb-4 ms-5">
@@ -72,14 +88,14 @@ export default function AssignmentEditor() {
                 </FormSelect>
                 <FormLabel className="fw-bold">Due</FormLabel>
                 <FormControl type="date"
-                  defaultValue="2024-05-13"
+                  defaultValue={properDueDateFormat}
                   className="mb-3">
                 </FormControl>
                 <Row className="mb-3">
                   <Col>
                     <FormLabel className="fw-bold">Available from</FormLabel>
                     <FormControl type="date"
-                      defaultValue="2024-05-06">
+                      defaultValue={properAvailableDateFormat}>
                     </FormControl>
                   </Col>
                   <Col>

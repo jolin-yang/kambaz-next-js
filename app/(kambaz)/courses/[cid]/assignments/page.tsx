@@ -49,11 +49,11 @@ export default function Assignments() {
                             <span className="text-danger"> Multiple Modules </span>
                               |
                             <span className="fw-bold"> Not available until </span>
-                              May 6 at 12:00am | 
+                              {assignment.available_date} | 
                           </div>
                           <div>
                             <span className="fw-bold"> Due </span>
-                              May 13 at 11:59pm     |     100 pts
+                            {assignment.due_date}     |     {assignment.points} pts
                           </div>
                         </div>
                     </div>
