@@ -1,6 +1,13 @@
+"use client"
+
 import { FormLabel, FormControl, Form, Col, Row, FormSelect, FormCheck, Button } from "react-bootstrap";
+import { useParams } from "next/navigation";
+import * as db from "../../../../database";
+import Link from "next/link";
 
 export default function AssignmentEditor() {
+  const { cid } = useParams();
+
     return (
       <div className="px-5 pt-3">
         <div className="px-5">
@@ -83,13 +90,15 @@ export default function AssignmentEditor() {
           </Row>
         </Form>
         <hr className="mt-5" />
-        <Button variant="danger" id="wd-assignment-btn" className="float-end">
-            <div className="position-relative me-2" style={{ bottom: "1px" }} />
-                Save</Button>
-        <Button variant="secondary" id="wd-group-btn" className="float-end me-2 mb-3">
-            <div className="position-relative me-2" style={{ bottom: "1px" }} />
-                Cancel</Button>
-       </div>
+        <div>
+          <Link href={`/courses/${cid}/assignments`} id="wd-group-btn" 
+          className="float-end me-2 mb-3 btn btn-danger position-relative">
+                  Save</Link>
+          <Link href={`/courses/${cid}/assignments`} id="wd-group-btn"
+          className="float-end me-2 mb-3 btn btn-secondary position-relative">
+                  Cancel</Link>
+        </div>
       </div>
+    </div>
   );}
   
