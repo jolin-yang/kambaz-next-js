@@ -4,8 +4,9 @@ import { usePathname } from "next/navigation";
 export default function Breadcrumb({ course }: { course: { name: string } | undefined; }) {
  const pathname = usePathname();
 
- const sectionNameFirstCharCapitalized = pathname.split("/").pop().charAt(0).toUpperCase();
- const sectionName = sectionNameFirstCharCapitalized + pathname.split("/").pop().slice(1);
+ const urlSegments = pathname.split("/");
+ const assignmentSegment = urlSegments[urlSegments.length - 1];
+ const sectionName = assignmentSegment.charAt(0).toUpperCase() + assignmentSegment.slice(1);
 
  return (
    <span>

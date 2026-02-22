@@ -6,14 +6,15 @@ import * as db from "../../../../database";
 import Link from "next/link";
 
 export default function AssignmentEditor() {
-  const { cid } = useParams();
+  const { cid, aid } = useParams();
+  const assignment = db.assignments.find(a => a._id === aid);
 
     return (
       <div className="px-5 pt-3">
         <div className="px-5">
         <Form>
           <FormLabel>Assignment Name</FormLabel>
-          <FormControl/><br />
+          <FormControl defaultValue={assignment.title}/><br />
           <FormControl as="textarea" rows={8} /><br />
           <Row className="mb-4 ms-5">
             <FormLabel column sm={2} className="text-end"> Points </FormLabel>
@@ -66,7 +67,8 @@ export default function AssignmentEditor() {
               <div className="border rounded p-3 w-100">
                 <FormLabel className="fw-bold">Assign to</FormLabel>
                 <FormSelect className="mb-3">
-                  <option value="Everyone" defaultChecked>Everyone</option>
+                  <option value=""></option>
+                  <option value="Everyone">Everyone</option>
                 </FormSelect>
                 <FormLabel className="fw-bold">Due</FormLabel>
                 <FormControl type="date"
