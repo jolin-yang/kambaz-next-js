@@ -19,7 +19,7 @@ export default function Assignments() {
       <div className="pt-3">
         <AssignmentControls /><br /><br /><br /><br />
         <ListGroup className="rounded-0" id="wd-assignments">
-        <div className="wd-title p-3 ps-2 bg-secondary">
+        <div className="wd-title fs-5 p-3 ps-2 bg-secondary">
               <BsGripVertical className="me-1 fs-3" /> 
               <MdOutlineArrowDropDown className="me-0.5 fs-3" />
                 <span className="fw-bold">ASSIGNMENTS</span> 
