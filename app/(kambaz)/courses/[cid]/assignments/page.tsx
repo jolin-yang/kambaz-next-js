@@ -29,7 +29,7 @@ export default function Assignments() {
         {assignments
           .filter((assignment: any) => assignment.course == cid)
           .map((assignment: any) => (
-            <ListGroupItem className="wd-module p-0 fs-5 border-gray">
+            <ListGroupItem className="wd-module p-0 fs-5 border-0">
               <ListGroup className="wd-assignment rounded-0">
                 <ListGroupItem className="wd-assignment p-3 ps-1">
                   <div className="d-flex align-items-center">
