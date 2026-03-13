@@ -23,7 +23,7 @@ function QueryCalculator() {
 
      Raw query values (already decoded by Next.js):
      <p>
-       a = <code>{aRaw}</code>n
+       a = <code>{aRaw}</code>
      </p>
      <p>
        b = <code>{bRaw}</code>
