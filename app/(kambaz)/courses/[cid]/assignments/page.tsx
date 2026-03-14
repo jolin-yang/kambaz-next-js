@@ -9,11 +9,38 @@ import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentSideButtons from "./AssignmentSideButtons";
 import GreenAssignmentIcon from "./GreenAssignmentIcon";
 import { useParams } from "next/navigation";
-import * as db from "../../../database";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import { deleteAssignment } from "./reducer";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments;
+  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
+  const dispatch = useDispatch();
+
+  function convertAvailableFromDateToString(date: string) {
+    if (!date) {
+      return "";
+    }
+    if (date.includes("at")) {
+      return date;
+    }
+
+    const d = new Date(date + "T12:00:00");
+    return d.toLocaleDateString("en-US", { month: "long", day: "numeric" }) + " at 12:00am";
+  }
+
+  function convertDueDateToString(date: string) {
+    if (!date) {
+      return "";
+    }
+    if (date.includes("at")) {
+      return date;
+    }
+
+    const d = new Date(date + "T12:00:00");
+    return d.toLocaleDateString("en-US", { month: "long", day: "numeric" }) + " at 11:59pm";
+  }
 
     return (
       <div className="pt-3">
@@ -49,16 +76,18 @@ export default function Assignments() {
                             <span className="text-danger"> Multiple Modules </span>
                               |
                             <span className="fw-bold"> Not available until </span>
-                              {assignment.available_date} | 
+                              {convertAvailableFromDateToString(assignment.available_date)} | 
                           </div>
                           <div>
                             <span className="fw-bold"> Due </span>
-                            {assignment.due_date}     |     {assignment.points} pts
+                            {convertDueDateToString(assignment.due_date)}     |     {assignment.points} pts
                           </div>
                         </div>
                     </div>
                     <div className="d-flex align-items-center ms-auto">
-                      <AssignmentSideButtons />
+                      <AssignmentSideButtons
+                      assignmentName={assignment.title}
+                      deleteAssignment={() => dispatch(deleteAssignment(assignment._id))}/>
                     </div>
                   </div>
                 </ListGroupItem>
@@ -69,5 +98,5 @@ export default function Assignments() {
       </div>
   );}
   
-  
+
   

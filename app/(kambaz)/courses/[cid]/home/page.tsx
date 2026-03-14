@@ -1,6 +1,9 @@
+"use client";
+
 import Modules from "../modules/page";
 import CourseStatus from "./Status";
 export default function Home() {
+
  return (
    <div id="wd-home">
     <div className="d-flex" id="wd-home">

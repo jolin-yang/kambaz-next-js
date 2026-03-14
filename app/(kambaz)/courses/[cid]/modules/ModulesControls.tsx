@@ -4,6 +4,8 @@ import GreenCheckmark from "./GreenCheckmark";
 import { FaBan } from "react-icons/fa";
 import ModuleEditor from "./ModuleEditor";
 import { useState } from "react";
+import { RootState } from "../../../store";
+import { useSelector } from "react-redux";
 
 export default function ModulesControls(
   { moduleName, setModuleName, addModule }:
@@ -11,13 +13,20 @@ export default function ModulesControls(
    const [show, setShow] = useState(false);
    const handleClose = () => setShow(false);
    const handleShow = () => setShow(true);
+   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+   const isFaculty = currentUser?.role !== "STUDENT";
 
  return (
    <div id="wd-modules-controls" className="text-nowrap">
+
+    {isFaculty && (
      <Button variant="danger" onClick={handleShow} size="lg" className="me-1 float-end" id="wd-add-module-btn">
        <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
        Module
      </Button>
+    )} 
+
+    {isFaculty && (
      <Dropdown className="float-end me-2">
        <DropdownToggle variant="secondary" size="lg" id="wd-publish-all-btn">
          <GreenCheckmark /> Publish All
@@ -37,12 +46,15 @@ export default function ModulesControls(
          </DropdownItem>
        </DropdownMenu>
      </Dropdown>
+     )}  
+
      <Button variant="secondary" size="lg" id="wd-view-progress" className="float-end me-2">
         View Progress
      </Button>
      <Button variant="secondary" size="lg" id="wd-collapse-all" className="float-end me-2">
         Collapse All
      </Button>
+     
      <ModuleEditor show={show} handleClose={handleClose} dialogTitle="Add Module"
        moduleName={moduleName} setModuleName={setModuleName} addModule={addModule} />
    </div>

@@ -16,6 +16,8 @@ export default function Modules() {
   const [moduleName, setModuleName] = useState("");
   const { modules } = useSelector((state: RootState) => state.modulesReducer);
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const isFaculty = currentUser?.role !== "STUDENT";
 
     return (
       <div className="wd-modules">
@@ -45,18 +47,22 @@ export default function Modules() {
                       }}
                       defaultValue={module.name}/>
               )}
+            
               <ModuleControlButtons 
                 moduleId={module._id}
                 deleteModule={(moduleId) => {
                   dispatch(deleteModule(moduleId));
                 }}
                 editModule={(moduleId) => dispatch(editModule(moduleId))}/>
-                </div>
+              </div>
+
             {module.lessons && (
               <ListGroup className="wd-lessons rounded-0">
                 {module.lessons.map((lesson: any) => (
                   <ListGroupItem className="wd-lesson p-3 ps-1">
-                    <BsGripVertical className="me-2 fs-3" /> {lesson.name} <LessonControlButtons /> </ListGroupItem>
+                    <BsGripVertical className="me-2 fs-3" /> {lesson.name} 
+                    <LessonControlButtons /> 
+                    </ListGroupItem>
                 ))}
                 </ListGroup>)}
                 </ListGroupItem>))}

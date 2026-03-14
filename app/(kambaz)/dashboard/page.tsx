@@ -12,7 +12,9 @@ export default function Dashboard() {
     const { courses } = useSelector((state: RootState) => state.coursesReducer);
     const dispatch = useDispatch();
     const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+    const isFaculty = currentUser?.role !== "STUDENT";
     const { enrollments } = db;
+    
 
     const [course, setCourse] = useState<any>({
         _id: "0", name: "New Course", number: "New Number",
@@ -22,7 +24,14 @@ export default function Dashboard() {
     
     return (
     <div id="wd-dashboard">
-        <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
+      <span>
+         <h1 id="wd-dashboard-title">Dashboard
+            <Button className="btn-primary btn-lg float-end" >Enrollments</Button>
+          </h1> 
+      </span>
+       <hr />
+
+        {isFaculty && (
         <h5 className="fs-3 mb-4">New Course
           <button className="btn btn-primary float-end"
             id="wd-add-new-course-click"
@@ -34,10 +43,18 @@ export default function Dashboard() {
             Update 
           </button>
         </h5>
+        )}
+
+      {isFaculty && (
       <FormControl value={course.name} className="mb-2"
             onChange={(e) => setCourse({ ...course, name: e.target.value }) } />
+      )}
+
+      {isFaculty && (
       <FormControl as="textarea" value={course.description} rows={3}
             onChange={(e) => setCourse({ ...course, description: e.target.value }) } />
+      )}
+
       <hr />
 
         <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
@@ -62,6 +79,8 @@ export default function Dashboard() {
                 <CardText className="wd-dashboard-course-description overflow-hidden" style={{height:"100px"}}>
                 {course.description} </CardText>
                 <Button variant="primary"> Go </Button>
+
+                {isFaculty && (
                 <button onClick={(event) => {
                     event.preventDefault();
                     dispatch(deleteCourse(course._id));
@@ -69,6 +88,9 @@ export default function Dashboard() {
                     id="wd-delete-course-click">
                     Delete
                 </button>
+                )}
+
+                {isFaculty && (
                 <button id="wd-edit-course-click"
                     onClick={(event) => {
                         event.preventDefault();
@@ -77,6 +99,8 @@ export default function Dashboard() {
                     className="btn btn-warning me-2 float-end" >
                     Edit
                 </button>
+                )}
+
                 </CardBody>
             </Link>
             </Card>
