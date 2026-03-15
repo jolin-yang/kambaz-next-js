@@ -11,7 +11,7 @@ export default function ReduxExamples() {
     return (
         <Provider store={store}>
             <div>
-                <h2>Redux Examples</h2>
+                <h1>Redux Examples</h1><hr />
                 <HelloRedux/>
                 <CounterRedux/>
                 <AddRedux/>

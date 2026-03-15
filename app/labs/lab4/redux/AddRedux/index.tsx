@@ -16,7 +16,7 @@ export default function AddRedux() {
       <h3 className="text-nowrap">{a} + {b} = {sum}</h3>
       <FormControl type="number" defaultValue={a}
         onChange={(e) => setA(parseInt(e.target.value))} />
-      <FormControl type="number" defaultValue={b}
+      <FormControl type="number" defaultValue={b} className="mb-2"
         onChange={(e) => setB(parseInt(e.target.value))} />
       <Button id="wd-add-redux-click"
               onClick={() => dispatch(add({ a, b }))}>

@@ -8,7 +8,7 @@ import ReactContextTodoList from "./todo-list/ReactContextTodoList";
 export default function ReactContextExamples() {
  return (
    <div>
-     <h1>React Context Examples</h1>
+     <h1>React Context Examples</h1><hr />
      <CounterProvider>
        <CounterContext />
      </CounterProvider>
