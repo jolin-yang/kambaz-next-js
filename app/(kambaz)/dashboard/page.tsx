@@ -12,7 +12,7 @@ export default function Dashboard() {
     const { courses } = useSelector((state: RootState) => state.coursesReducer);
     const { currentUser } = useSelector((state: RootState) => state.accountReducer);
     const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer);;
-    const isFaculty = currentUser?.role !== "STUDENT";
+    const isFaculty = currentUser !== null && currentUser.role !== "STUDENT";
     const dispatch = useDispatch();
 
     const [displayAllCourses, setDisplayAllCourses] = useState(false);
@@ -86,7 +86,9 @@ export default function Dashboard() {
               </Link>
 
             <CardBody>
-            <Button variant="primary" disabled={!isEnrolledInCourse(course._id)}> Go </Button>
+            <Button variant="primary" disabled={!isEnrolledInCourse(course._id)} className="mb-1"> Go </Button>
+
+                {!isFaculty && (<br />)}
                 
                 {isFaculty && (
                 <button onClick={(event) => {
@@ -110,7 +112,7 @@ export default function Dashboard() {
                 )}
 
                 {isEnrolledInCourse(course._id) ? (
-                  <Button variant="danger" className="mt-4 mb-3 ms-1 float-end"
+                  <Button variant="danger" className="mt-4 mb-2"
                   onClick={(event) => {
                     event.preventDefault();
                     dispatch(unenroll({user: currentUser._id, course: course._id}));
@@ -118,7 +120,7 @@ export default function Dashboard() {
                     id="wd-unenroll-course">
                     Unenroll
                   </Button>) : (
-                  <Button variant="success" className="mt-4 mb-3 ms-1 float-end"
+                  <Button variant="success" className="mt-4 mb-2"
                   onClick={(event) => {
                     event.preventDefault();
                     dispatch(enroll({user: currentUser._id, course: course._id}));
