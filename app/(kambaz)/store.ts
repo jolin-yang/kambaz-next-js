@@ -3,12 +3,15 @@ import coursesReducer from "./courses/reducer";
 import modulesReducer from "./courses/[cid]/modules/reducer";
 import accountReducer from "./account/reducer";
 import assignmentsReducer from "./courses/[cid]/assignments/reducer";
+import enrollmentsReducer from "./enrollments/reducer";
+
 
 const store = configureStore({
  reducer: { coursesReducer, 
             modulesReducer,
             accountReducer,
             assignmentsReducer,
+            enrollmentsReducer,
  },
 });
 
