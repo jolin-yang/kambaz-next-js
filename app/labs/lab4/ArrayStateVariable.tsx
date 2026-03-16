@@ -29,6 +29,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { addTodo, deleteTodo } from "./redux/todos/todosReducer";
 import { RootState } from "./store";
+import { ListGroup, ListGroupItem } from "react-bootstrap";
 
 export default function ArrayStateVariable() {
   const { todos } = useSelector((state: RootState) => state.todosReducer);
@@ -39,15 +40,15 @@ export default function ArrayStateVariable() {
       <h2>Array State Variable</h2>
       <button onClick={() => dispatch(addTodo({ title: "New Todo" }))} 
               className="btn btn-success mb-2">Add Element</button>
-      <ul className="list-group col-9">
+      <ListGroup className="list-group col-9">
         {todos.map((todo: any) => (
-          <li key={todo.id} className="list-group-item">
+          <ListGroupItem key={todo.id} className="list-group-item">
             <span className="fs-5"> {todo.title} </span>
             <button onClick={() => dispatch(deleteTodo(todo.id))} 
                     className="btn btn-danger float-end">
               Delete</button>
-          </li>))}
-      </ul>
+          </ListGroupItem>))}
+      </ListGroup>
       <hr/>
     </div>
   );
