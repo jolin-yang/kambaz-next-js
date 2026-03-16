@@ -82,37 +82,39 @@ export default function Dashboard() {
                   {course.name} </CardTitle>
                   <CardText className="wd-dashboard-course-description overflow-hidden" style={{height:"100px"}}>
                   {course.description} </CardText>
-                  </CardBody>
+
+                  <button className="btn btn-primary mb-1" disabled={!isEnrolledInCourse(course._id)}> 
+                    Go 
+                  </button>
+
+                  {!isFaculty && (<br />)}
+                  
+                  {isFaculty && (
+                  <button onClick={(event) => {
+                      event.preventDefault();
+                      dispatch(deleteCourse(course._id));
+                      }} className="btn btn-danger float-end"
+                      id="wd-delete-course-click">
+                      Delete
+                  </button>
+                  )}
+
+                  {isFaculty && (
+                  <button id="wd-edit-course-click"
+                      onClick={(event) => {
+                          event.preventDefault();
+                          setCourse(course);
+                      }}
+                      className="btn btn-warning me-2 float-end" >
+                      Edit
+                  </button>
+                  )}
+              </CardBody>
               </Link>
 
             <CardBody>
-            <Button variant="primary" disabled={!isEnrolledInCourse(course._id)} className="mb-1"> Go </Button>
-
-                {!isFaculty && (<br />)}
-                
-                {isFaculty && (
-                <button onClick={(event) => {
-                    event.preventDefault();
-                    dispatch(deleteCourse(course._id));
-                    }} className="btn btn-danger float-end"
-                    id="wd-delete-course-click">
-                    Delete
-                </button>
-                )}
-
-                {isFaculty && (
-                <button id="wd-edit-course-click"
-                    onClick={(event) => {
-                        event.preventDefault();
-                        setCourse(course);
-                    }}
-                    className="btn btn-warning me-2 float-end" >
-                    Edit
-                </button>
-                )}
-
                 {isEnrolledInCourse(course._id) ? (
-                  <Button variant="danger" className="mt-4 mb-2"
+                  <Button variant="danger" className="mt-2 mb-2"
                   onClick={(event) => {
                     event.preventDefault();
                     dispatch(unenroll({user: currentUser._id, course: course._id}));
@@ -120,7 +122,7 @@ export default function Dashboard() {
                     id="wd-unenroll-course">
                     Unenroll
                   </Button>) : (
-                  <Button variant="success" className="mt-4 mb-2"
+                  <Button variant="success" className="mt-2 mb-2"
                   onClick={(event) => {
                     event.preventDefault();
                     dispatch(enroll({user: currentUser._id, course: course._id}));
