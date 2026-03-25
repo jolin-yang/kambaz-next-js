@@ -40,7 +40,7 @@ export default function Lab3() {
   console.log('Hello World!');
   return (
     <div id="wd-lab3">
-      <h3>Lab 3</h3><br />
+      <h2>Lab 3</h2><br />
       <VariablesAndConstants/>
       <VariableTypes/>
       <BooleanVariables/>
