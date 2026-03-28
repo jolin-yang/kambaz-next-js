@@ -22,10 +22,12 @@ export default function Profile() {
    if (!currentUser) return redirect("/account/signin");
    setProfile(currentUser);
  };
- const signout = () => {
-   dispatch(setCurrentUser(null));
-   redirect("/account/signin");
- };
+ const signout = async () => {
+  await client.signout();
+  dispatch(setCurrentUser(null));
+  redirect("/account/signin");
+};
+
  useEffect(() => {
    fetchProfile();
  }, []);
@@ -66,9 +68,9 @@ export default function Profile() {
            <option value="STUDENT">Student</option>
          </select>
          <button onClick={updateProfile} className="btn btn-primary w-100 mb-2"> Update </button>
-         <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">
+         <button onClick={signout} className="btn btn-danger w-100 mb-2" id="wd-signout-btn">
            Sign out
-         </Button>
+         </button>
        </div>
      )}
    </div>
