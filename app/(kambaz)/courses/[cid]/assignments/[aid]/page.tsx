@@ -12,7 +12,7 @@ import Link from "next/link";
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
   const assignment = useSelector((state: RootState) => state.assignmentsReducer.assignments.find(
-    (a : any) => a._id === aid));
+    (a : any) => a._id === aid)) as any;
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const isFaculty = currentUser?.role !== "STUDENT";
