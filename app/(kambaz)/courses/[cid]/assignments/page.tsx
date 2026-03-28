@@ -1,5 +1,6 @@
 "use client"
 
+import * as client from "../../client";
 import Link from "next/link";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
@@ -11,10 +12,21 @@ import GreenAssignmentIcon from "./GreenAssignmentIcon";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
-import { deleteAssignment } from "./reducer";
+import { deleteAssignment, setAssignments } from "./reducer";
+import { useEffect, useState } from "react";
 
 export default function Assignments() {
   const { cid } = useParams();
+  const [assignment, setAssignment] = useState<any>({
+    title: "",
+    description: "",
+    points: 100,
+    due_date: "",
+    available_date: "",
+    until_date: "",
+    course: cid
+  });
+
   const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
   const dispatch = useDispatch();
 
@@ -42,6 +54,21 @@ export default function Assignments() {
     return d.toLocaleDateString("en-US", { month: "long", day: "numeric" }) + " at 11:59pm";
   }
 
+  const fetchAssignments = async () => {
+      const assignments = await client.findAssignmentsForCourse(cid as string);
+      dispatch(setAssignments(assignments));
+    };
+  
+    const onRemoveAssignment = async (assignmentId: string) => {
+      await client.deleteAssignment(assignmentId);
+      dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId)));
+    };
+  
+    useEffect(() => {
+      fetchAssignments();
+    }, []);
+    
+
     return (
       <div className="pt-3">
         <AssignmentControls /><br /><br /><br /><br />
@@ -54,7 +81,6 @@ export default function Assignments() {
                 <span className="rounded-5 border border-dark fs-6 float-end px-2 py-1"> 40% of Total </span>
         </div>
         {assignments
-          .filter((assignment: any) => assignment.course == cid)
           .map((assignment: any) => (
             <ListGroupItem className="wd-module p-0 fs-5 border-0">
               <ListGroup className="wd-assignment rounded-0">
@@ -87,7 +113,7 @@ export default function Assignments() {
                     <div className="d-flex align-items-center ms-auto">
                       <AssignmentSideButtons
                       assignmentName={assignment.title}
-                      deleteAssignment={() => dispatch(deleteAssignment(assignment._id))}/>
+                      deleteAssignment={() => onRemoveAssignment(assignment._id)}/>
                     </div>
                   </div>
                 </ListGroupItem>
