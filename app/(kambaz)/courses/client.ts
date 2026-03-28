@@ -41,5 +41,11 @@ export const createModuleForCourse = async (courseId: string, module: any) => {
       module
     );
     return response.data;
-};  
-      
+}; 
+
+
+const MODULES_API = `${HTTP_SERVER}/api/modules`;
+export const deleteModule = async (moduleId: string) => {
+    const response = await axios.delete(`${MODULES_API}/${moduleId}`);
+    return response.data;
+};   

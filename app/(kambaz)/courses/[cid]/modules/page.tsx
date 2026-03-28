@@ -30,6 +30,11 @@ export default function Modules() {
     dispatch(setModules([...modules, module]));
   };
 
+  const onRemoveModule = async (moduleId: string) => {
+    await client.deleteModule(moduleId);
+    dispatch(setModules(modules.filter((m: any) => m._id !== moduleId)));
+  };
+
   useEffect(() => {
     fetchModules();
   }, []);
@@ -62,9 +67,7 @@ export default function Modules() {
             
               <ModuleControlButtons 
                 moduleId={module._id}
-                deleteModule={(moduleId) => {
-                  dispatch(deleteModule(moduleId));
-                }}
+                deleteModule={(moduleId) => onRemoveModule(moduleId)}
                 editModule={(moduleId) => dispatch(editModule(moduleId))}/>
               </div>
 
