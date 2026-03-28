@@ -35,6 +35,12 @@ export default function Modules() {
     dispatch(setModules(modules.filter((m: any) => m._id !== moduleId)));
   };
 
+  const onUpdateModule = async (module: any) => {
+    await client.updateModule(module);
+    const newModules = modules.map((m: any) => m._id === module._id ? module : m );
+    dispatch(setModules(newModules));
+  };
+
   useEffect(() => {
     fetchModules();
   }, []);
@@ -59,7 +65,7 @@ export default function Modules() {
                       }
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
-                          dispatch(updateModule({ ...module, editing: false }));
+                          onUpdateModule({ ...module, editing: false });
                         }
                       }}
                       defaultValue={module.name}/>
