@@ -1,6 +1,6 @@
 "use client"
 
-import * as client from "../../client";
+import * as client from "./client";
 import Link from "next/link";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
@@ -13,19 +13,10 @@ import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { deleteAssignment, setAssignments } from "./reducer";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const [assignment, setAssignment] = useState<any>({
-    title: "",
-    description: "",
-    points: 100,
-    due_date: "",
-    available_date: "",
-    until_date: "",
-    course: cid
-  });
 
   const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
   const dispatch = useDispatch();
@@ -123,6 +114,4 @@ export default function Assignments() {
           </ListGroup>
       </div>
   );}
-  
-
   

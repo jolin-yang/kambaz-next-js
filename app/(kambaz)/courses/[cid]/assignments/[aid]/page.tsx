@@ -1,6 +1,6 @@
 "use client"
 
-import * as client from "../../../client";
+import * as client from "../client";
 import { addAssignment, updateAssignment } from "../reducer";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../store";
