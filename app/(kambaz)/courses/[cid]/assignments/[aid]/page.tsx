@@ -1,5 +1,6 @@
 "use client"
 
+import * as client from "../client";
 import { addAssignment, updateAssignment } from "../reducer";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../store";
@@ -11,7 +12,7 @@ import Link from "next/link";
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
   const assignment = useSelector((state: RootState) => state.assignmentsReducer.assignments.find(
-    (a : any) => a._id === aid));
+    (a : any) => a._id === aid)) as any;
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const isFaculty = currentUser?.role !== "STUDENT";
@@ -37,18 +38,17 @@ export default function AssignmentEditor() {
   const [dueDate, setDueDate] = useState(properDueDateFormat);
   const [availableUntilDate, setAvailableUntilDate] = useState((assignment as any)?.until_date || "");
 
-  const onSave = () => {
-      console.log("aid:", aid);
-      console.log("all fields:", { title, description, points, dueDate, availableFromDate, availableUntilDate });
+  const onSave = async () => {
     if (aid === "new") {
-      dispatch(addAssignment(
-        { title, course: cid, description, points, due_date: dueDate, available_date: availableFromDate, until_date: availableUntilDate}
-      ));
+      const newAssignment = await client.createAssignmentForCourse(cid as string, 
+        { title, course: cid, description, points, due_date: dueDate, available_date: availableFromDate, until_date: availableUntilDate }
+      );
+      dispatch(addAssignment(newAssignment));
     } 
     else {
-      dispatch(updateAssignment(
-        { _id: aid, title, course: cid, description, points, due_date: dueDate, available_date: availableFromDate, until_date: availableUntilDate}
-      ));
+      const updatedAssignment = { _id: aid, title, course: cid, description, points, due_date: dueDate, available_date: availableFromDate, until_date: availableUntilDate };
+      await client.updateAssignment(updatedAssignment);
+      dispatch(updateAssignment(updatedAssignment));
     }
   }
 
