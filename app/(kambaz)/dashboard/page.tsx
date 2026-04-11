@@ -45,6 +45,7 @@ export default function Dashboard() {
     const onDeleteCourse = async (courseId: string) => {
       const status = await client.deleteCourse(courseId);
       dispatch(setCourses(courses.filter((course) => course._id !== courseId)));
+      setAllCourses(allCourses.filter((course) => course._id !== courseId));
     };  
 
     const onUpdateCourse = async () => {
@@ -52,7 +53,9 @@ export default function Dashboard() {
       dispatch(setCourses(courses.map((c) => {
           if (c._id === course._id) { return course; }
           else { return c; }
-    })));};
+    })));
+    setAllCourses(allCourses.map((c) => c._id === course._id ? course : c));
+    };
 
     const enroll = async (userId: string, courseId: string) => {
       await enrollmentsClient.enrollInCourse(userId,courseId);
