@@ -3,16 +3,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import * as client from "../courses/client";
-import * as enrollmentsClient from "../enrollments/client";
 import { Row, Col, Card, CardImg, CardBody, CardTitle, CardText, Button, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewCourse, deleteCourse, updateCourse, setCourses } from "../courses/reducer";
+import { setCourses } from "../courses/reducer";
 import { RootState } from "../store";
 
 export default function Dashboard() {
     const { courses } = useSelector((state: RootState) => state.coursesReducer);
     const { currentUser } = useSelector((state: RootState) => state.accountReducer);
-    const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer);;
     const isFaculty = currentUser !== null && currentUser.role !== "STUDENT";
     const dispatch = useDispatch();
 
@@ -58,12 +56,12 @@ export default function Dashboard() {
     };
 
     const enroll = async (userId: string, courseId: string) => {
-      await enrollmentsClient.enrollInCourse(userId,courseId);
+      await client.enrollIntoCourse(userId,courseId);
       fetchCourses();
     };  
     
     const unenroll = async (userId: string,courseId: string) => {
-      await enrollmentsClient.unenrollFromCourse(userId,courseId);
+      await client.unenrollFromCourse(userId,courseId);
       fetchCourses();
     };
   
