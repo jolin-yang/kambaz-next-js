@@ -15,7 +15,7 @@ export default function CourseNavigation() {
       {links.map((link) => (
         <ListGroupItem key={link} 
               as={Link}
-              href= {link === "People" ? `/courses/${cid}/${link.toLowerCase()}/table` : `/courses/${cid}/${link.toLowerCase()}`}
+              href= {link === "People" ? `/courses/${cid}/${link.toLowerCase()}` : `/courses/${cid}/${link.toLowerCase()}`}
               className={`list-group-item border-0
                 ${pathname.includes(link.toLowerCase()) ? "active" : "text-danger"} `}>
         {link}
