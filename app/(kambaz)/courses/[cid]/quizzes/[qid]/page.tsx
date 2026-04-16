@@ -2,7 +2,7 @@
 
 import { RootState } from "../../../../store";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setQuizzes } from "./../reducer";
 import * as client from "./../client";
@@ -13,17 +13,27 @@ import { Row, Col } from "react-bootstrap";
 export default function QuizDetails() {
   const { cid, qid } = useParams();
   const dispatch = useDispatch();
+  const [quiz, setQuiz] = useState<any>(null);
 
   useEffect(() => {
-    client.findQuizzesForCourse(cid as string)
-      .then((data) => dispatch(setQuizzes(data)));
-  }, [cid]);
+    if (!qid) return;
 
-  const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
-    (q : any) => q._id === qid)) as any;
+    client.findQuizById(qid as string).then((data) => {
+      setQuiz(data);
+    });
+  }, [qid]);
+
+  // useEffect(() => {
+  //   client.findQuizzesForCourse(cid as string)
+  //     .then((data) => dispatch(setQuizzes(data)));
+  // }, [cid]);
+
+  // const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
+  //   (q : any) => q._id === qid)) as any;
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const isFaculty = currentUser?.role !== "STUDENT";
   const isStudent = !isFaculty;
+
 
   function convertDueDateToString(date: string) {
     if (!date) {
@@ -46,7 +56,6 @@ export default function QuizDetails() {
       timeZone: "UTC"
     }) + " at 12:00am";
   }
-  
     return (
       <div>
         <div id="wd-quiz-details-buttons" className="d-flex justify-content-center mb-3">
@@ -131,19 +140,3 @@ export default function QuizDetails() {
       </div>
   );}
   
-
-//   Quiz Type - Graded Quiz (default), Practice Quiz, Graded Survey, Ungraded Survey
-//   Points - the sum of the points of all questions in the quiz
-//   Assignment Group - Quizzes (default), Exams, Assignments, Project
-//   Shuffle Answers - Yes (default) / No
-//   Time Limit - 20 Minutes (default)
-//   Multiple Attempts - No (default) / Yes
-//   How Many Attempts - 1 (default). If Multiple Attempts is Yes, then can configure how many times the student can retake the quiz
-//   Show Correct Answers - If and when correct answers are shown to students
-//   Access Code - Passcode students need to type to access the quiz. Default is blank
-//   One Question at a Time - Yes (default) / No
-//   Webcam Required - No (default) / Yes
-//   Lock Questions After Answering - No (default) / Yes
-//   Due date - date the assignment is due
-//   Available date - date assignment is available
-//   Until date - date assignment is available until

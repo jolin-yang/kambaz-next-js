@@ -8,7 +8,7 @@ export const findQuizzesForCourse = async (courseId: string) => {
     return response.data;
 };
 
-export const createQuizzesForCourse = async (courseId: string, quiz: any) => {
+export const createQuizForCourse = async (courseId: string, quiz: any) => {
     const response = await axios.post(
       `${COURSES_API}/${courseId}/quizzes`,
       quiz
@@ -26,3 +26,8 @@ export const updateQuiz = async (quiz: any) => {
     const { data } = await axios.put(`${QUIZZES_API}/${quiz._id}`, quiz);
     return data;
 }; 
+
+export const findQuizById = async (quizId: string) => {
+  const { data } = await axios.get(`${QUIZZES_API}/${quizId}`);
+  return data;
+}

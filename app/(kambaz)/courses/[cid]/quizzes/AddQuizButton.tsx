@@ -1,15 +1,32 @@
-import { FormControl, InputGroup } from "react-bootstrap";
+"use client"
+
+import * as client from "./client";
+import { Button, FormControl, InputGroup } from "react-bootstrap";
+import { addQuiz } from "./reducer";
 import { FaPlus } from "react-icons/fa6";
 import { IoSearchOutline } from "react-icons/io5";
-
 import InputGroupText from "react-bootstrap/esm/InputGroupText";
-import Link from "next/link";
 import { RootState } from "../../../store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function AssignmentControls() {
+export default function AddQuizButton() {
     const { currentUser } = useSelector((state: RootState) => state.accountReducer);
     const isFaculty = currentUser?.role !== "STUDENT";
+    const dispatch = useDispatch();
+    const { cid } = useParams();  
+    const router = useRouter();
+
+    const onAddQuiz = async () => {
+          const newQuiz = await client.createQuizForCourse(cid as string, {
+            title: "New Quiz"
+          });
+      
+          dispatch(addQuiz(newQuiz));
+
+          router.push(`/courses/${cid}/quizzes/${newQuiz._id}`);
+    };
 
     return (
         <div id="wd-quiz-controls" className="text-nowrap">
@@ -24,9 +41,9 @@ export default function AssignmentControls() {
             </InputGroup>
 
             {isFaculty && (
-            <Link href="./quizzes/new" id="wd-quiz-btn" className="float-end btn btn-danger btn-lg">
+            <Button id="wd-quiz-btn" onClick={onAddQuiz} className="float-end btn btn-danger btn-lg">
                 <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-                    Quiz</Link>
+                    Quiz</Button>
             )}
         </div>
     )
