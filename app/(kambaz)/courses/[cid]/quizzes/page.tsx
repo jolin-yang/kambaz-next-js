@@ -55,7 +55,7 @@ export default function Quizzes() {
     if (currentDate < availableDate) {
         return {
             text: "Not available until",
-            date: availableDate
+            date: quiz.available_date
         };
     }
     return { text: "" };
@@ -78,6 +78,13 @@ export default function Quizzes() {
 
     return (
       <div className="pt-3">
+        
+        {quizzes.length === 0 && (
+            <div className="text-end fs-4 mb-3">
+                There are no quizzes yet. Click the <b>+ Quiz</b> button to add a quiz.
+            </div>
+        )}
+        
         <AddQuizButton /><br /><br /><br /><br />
         <ListGroup className="rounded-0" id="wd-quizzes">
         <div className="wd-title fs-5 p-3 ps-2 bg-secondary">
