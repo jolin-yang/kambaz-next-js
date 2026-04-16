@@ -27,17 +27,19 @@ export default function Quizzes() {
     return new Date(date).toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
+        timeZone: "UTC"
       }) + " at 11:59pm";
   }
 
-  function convertAvailableDateToString(date: string) {
+  function convertAvailableDateToString(date: string) {  
     if (!date) {
       return "";
     }
     return new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-      }) + " at 12:00am";
+      month: "long",
+      day: "numeric",
+      timeZone: "UTC"
+    }) + " at 12:00am";
   }
 
   function getAvailability(quiz: any) {
@@ -53,7 +55,7 @@ export default function Quizzes() {
     if (currentDate < availableDate) {
         return {
             text: "Not available until",
-            date: availableDate.toLocaleDateString()
+            date: availableDate
         };
     }
   }
