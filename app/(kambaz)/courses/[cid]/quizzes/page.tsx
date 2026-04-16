@@ -58,6 +58,7 @@ export default function Quizzes() {
             date: availableDate
         };
     }
+    return { text: "" };
   }
 
   const fetchQuizzes = async () => {
