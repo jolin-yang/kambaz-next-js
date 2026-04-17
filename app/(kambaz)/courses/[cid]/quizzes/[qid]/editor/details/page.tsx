@@ -81,28 +81,28 @@ export default function QuizDetailsEditor() {
   }, []);
 
   const onSave = async () => {
-        const updatedQuiz = { 
-            _id: qid, 
-            title, 
-            course: cid, 
-            description, 
-            quiz_type: quizType, 
-            points, 
-            assignment_group: assignmentGroup,
-            shuffle_answers: shuffleAnswers,
-            time_limit: timeLimit,
-            multiple_attempts: multipleAttempts, 
-            show_correct_answers: showCorrectAnswers,
-            access_code: accessCode, 
-            one_question_at_a_time: oneQuestionAtATime, 
-            webcam_required: webcamRequired, 
-            lock_questions_after_answering: lockQuestionsAfterAnswering,
-            due_date: dueDate, 
-            available_date: availableFromDate, 
-            until_date: availableUntilDate
-        };
-        await client.updateQuiz(updatedQuiz);
-        dispatch(updateQuiz(updatedQuiz));
+    const updatedQuiz = { 
+        _id: qid, 
+        title, 
+        course: cid, 
+        description, 
+        quiz_type: quizType, 
+        points, 
+        assignment_group: assignmentGroup,
+        shuffle_answers: shuffleAnswers,
+        time_limit: timeLimit,
+        multiple_attempts: multipleAttempts, 
+        show_correct_answers: showCorrectAnswers,
+        access_code: accessCode, 
+        one_question_at_a_time: oneQuestionAtATime, 
+        webcam_required: webcamRequired, 
+        lock_questions_after_answering: lockQuestionsAfterAnswering,
+        due_date: dueDate, 
+        available_date: availableFromDate, 
+        until_date: availableUntilDate
+    };
+    await client.updateQuiz(updatedQuiz);
+    dispatch(updateQuiz(updatedQuiz));
   }
 
     return (
@@ -298,9 +298,3 @@ export default function QuizDetailsEditor() {
         </div>
       </div>
   );}
-  
-
-  // Points - the sum of the points of all questions in the quiz
-// Due date - date the assignment is due
-// Available date - date assignment is available
-// Until date - date assignment is available until

@@ -12,10 +12,13 @@ import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { setQuizzes } from "./reducer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import NoQuizDialog from "./NoQuizDialog";
 
 export default function Quizzes() {
   const { cid } = useParams();
+  const [show, setShow] = useState(true);
+  const handleClose = () => setShow(false);
 
   const { quizzes } = useSelector((state: RootState) => state.quizzesReducer);
   const dispatch = useDispatch();
@@ -81,7 +84,8 @@ export default function Quizzes() {
         
         {quizzes.length === 0 && (
             <div className="text-end fs-4 mb-3">
-                There are no quizzes yet. Click the <b>+ Quiz</b> button to add a quiz.
+                {/* There are no quizzes yet. Click the <b>+ Quiz</b> button to add a quiz. */}
+                <NoQuizDialog show={show} handleClose={handleClose}/>
             </div>
         )}
         
