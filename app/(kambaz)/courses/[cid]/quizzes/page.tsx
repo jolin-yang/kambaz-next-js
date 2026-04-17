@@ -44,8 +44,8 @@ export default function Quizzes() {
 
   function getAvailability(quiz: any) {
     const currentDate = new Date();
-    const untilDate = new Date(quiz.until_date);
-    const availableDate = new Date(quiz.available_date);
+    const untilDate = new Date(quiz.until_date + "T23:59:59");
+    const availableDate = new Date(quiz.available_date + "T00:00:00");
     if (currentDate > untilDate) {
         return { text: "Closed " };
     }
