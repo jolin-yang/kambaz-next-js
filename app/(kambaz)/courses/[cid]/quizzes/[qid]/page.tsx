@@ -13,27 +13,13 @@ import { Row, Col } from "react-bootstrap";
 export default function QuizDetails() {
   const { cid, qid } = useParams();
   const dispatch = useDispatch();
-  const [quiz, setQuiz] = useState<any>(null);
 
-  useEffect(() => {
-    if (!qid) return;
-
-    client.findQuizById(qid as string).then((data) => {
-      setQuiz(data);
-    });
-  }, [qid]);
-
-  // useEffect(() => {
-  //   client.findQuizzesForCourse(cid as string)
-  //     .then((data) => dispatch(setQuizzes(data)));
-  // }, [cid]);
-
-  // const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
-  //   (q : any) => q._id === qid)) as any;
+  const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
+    (q : any) => q._id === qid)) as any;
+  
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const isFaculty = currentUser?.role !== "STUDENT";
   const isStudent = !isFaculty;
-
 
   function convertDueDateToString(date: string) {
     if (!date) {
@@ -56,6 +42,17 @@ export default function QuizDetails() {
       timeZone: "UTC"
     }) + " at 12:00am";
   }
+
+  const fetchQuizzes = async () => {
+        const quizzes = await client.findQuizzesForCourse(cid as string);
+        dispatch(setQuizzes(quizzes));
+  };
+
+  useEffect(() => {
+        fetchQuizzes();
+  }, []);
+
+
     return (
       <div>
         <div id="wd-quiz-details-buttons" className="d-flex justify-content-center mb-3">
