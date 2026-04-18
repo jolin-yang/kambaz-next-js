@@ -11,14 +11,8 @@ import { FormLabel, Col, FormControl, Row, FormSelect, FormCheck, Button } from 
 
 export default function QuizQuestionsEditor() {
     const { cid, qid } = useParams();
-    // const { title, setTitle } = useState(question?.title "");
-    const [questionType, setQuestionType] = useState("Multiple Choice");
-    const [answerChoices, setAnswerChoices] = useState([
-        { text: "", isCorrect: true},
-        { text: "", isCorrect: false},
-    ])
-    const [trueFalseAnswer, setTrueFalseAnswer] = useState(true);
-    const [addNewQuestion, setAddNewQuestion] = useState(false);
+
+    const [questions, setQuestions] = useState<any[]>([]);
     const [editMode, setEditMode] = useState(false);
 
     // const onSave = async () => {
@@ -46,53 +40,129 @@ export default function QuizQuestionsEditor() {
     //     dispatch(updateQuiz(updatedQuiz));
     //   }
 
-    const addAnswerChoice = () => {
-        setAnswerChoices([
-          ...answerChoices,
-          { text: "", isCorrect: false }
-        ]);
+    // const onSave = async () => {
+    //     await client.updateQuiz({
+    //       _id: qid,
+    //       course: cid,
+    //       questions
+    //     });
+    //   };
+
+    const addNewQuestion = () => {
+        const newQuestion = {
+            title: "",
+            question: "",
+            points: "",
+            question_type: "Multiple Choice",
+            multiple_choice: [{ text: "", isCorrect: true}, { text: "", isCorrect: false}],
+            trueFalseAnswer: null,
+            blanks: [""],
+        };
+
+        setQuestions([...questions, newQuestion]);
+    }
+
+    const updateQuestionType = (questionType: string, questionIndex: number) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].question_type = questionType;
+
+        setQuestions(updatedQuestions);
       };
 
-    const deleteAnswerChoice = (index: number) => {
-        const updatedAnswerChoices = answerChoices.filter((_, i) => i !== index);
-        setAnswerChoices(updatedAnswerChoices);
-     };
+    const updateQuestionField = (questionIndex: number, field: string, newValue: any) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex] = { ...updatedQuestions[questionIndex], [field]: newValue };
 
-    const updateAnswerChoice = (index: number, updatedAnswerChoice: string ) => {
-        const updatedAnswerChoices = answerChoices.map((choice, i) =>
-            i == index ? {...choice, text: updatedAnswerChoice} : choice
-        );
-        setAnswerChoices(updatedAnswerChoices);
-     };
-    
-    const setCorrectAnswer = (index: number) => {
-        const answerAccuracy = answerChoices.map((c, i) => ({
-            ...c,
-            isCorrect: i == index
-        }));
-        setAnswerChoices(answerAccuracy);
-     };
+        setQuestions(updatedQuestions);
+    }
 
+
+    const addMCQChoice = (questionIndex: number) => {
+        const updatedQuestions = [...questions];
+
+        // updatedQuestions[questionIndex].multiple_choice.push({ text: "", isCorrect: false});
+        updatedQuestions[questionIndex] = { 
+            ...updatedQuestions[questionIndex], 
+            multiple_choice: [...updatedQuestions[questionIndex].multiple_choice, { text: "", isCorrect: false }]};
+
+        setQuestions(updatedQuestions);
+    };
+
+    const addFillInBlankChoice = (questionIndex: number) => {
+        const updatedQuestions = [...questions];
+
+        // updatedQuestions[questionIndex].blanks.push("");
+        updatedQuestions[questionIndex] = { 
+            ...updatedQuestions[questionIndex], 
+            blanks: [...updatedQuestions[questionIndex].blanks, ""]};
+
+        setQuestions(updatedQuestions);
+    };
+
+    const updateMCQChoice = (questionIndex: number, choiceIndex: number, newValue: string) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].multiple_choice[choiceIndex].text = newValue;
+
+        setQuestions(updatedQuestions);
+    };
+
+    const updateFillInBlankChoice = (questionIndex: number, choiceIndex: number, newValue: string) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].blanks[choiceIndex] = newValue;
+
+        setQuestions(updatedQuestions);
+    };
+
+    const deleteMCQChoice = (questionIndex: number, choiceIndex: number) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].multiple_choice = updatedQuestions[questionIndex].multiple_choice.filter((_, index) => index !== choiceIndex);
+
+        setQuestions(updatedQuestions);
+    };
+
+    const deleteFillInBlankChoice = (questionIndex: number, choiceIndex: number) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].blanks = updatedQuestions[questionIndex].blanks.filter((_, index) => index !== choiceIndex);
+
+        setQuestions(updatedQuestions);
+    };
+
+    const setMCQCorrectAnswer = (questionIndex: number, choiceIndex: number) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].multiple_choice = updatedQuestions[questionIndex].multiple_choice.map((choice, index) => (
+            {...choice, isCorrect: index === choiceIndex}
+        ));
+
+        setQuestions(updatedQuestions);
+    };
+
+    const setTrueFalseAnswer = (questionIndex: number, value: boolean) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].trueFalseAnswer = value;
+
+        setQuestions(updatedQuestions);
+     };
 
   
     return (
       <div className="px-5 pt-3">
         <div className="d-flex justify-content-center mb-4">
             <Button className="me-3 mb-3 btn btn-lg btn-secondary position-relative"
-                onClick={() => setAddNewQuestion(true)}>
+                onClick={() => addNewQuestion()}>
                 <span className="me-1"><FaPlus size={15}/></span>
                 New Question
             </Button><br />
         </div>
 
-        {addNewQuestion && (
-            <div id="addNewQuestion">
+        {questions.map((question, questionIndex) => (
+        <div id="addNewQuestion">
             <Row>
                 <Col className="col-4 gap-1">
-                    <FormControl type="text" value="hello" />
+                    <FormControl type="text" value={question.title}
+                    onChange={(e) => updateQuestionField(questionIndex, "title", e.target.value)}/>
                 </Col>
                 <Col className="col-4 me-5">
-                    <FormSelect value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
+                    <FormSelect value={question.question_type} onChange={(e) => updateQuestionType(e.target.value, questionIndex)}>
                         <option value="Multiple Choice">Multiple Choice</option>
                         <option value="True/False">True/False</option>
                         <option value="Fill in the Blank">Fill in the Blank</option>
@@ -102,50 +172,50 @@ export default function QuizQuestionsEditor() {
                 <Col className="text-end">
                     <FormLabel column sm={3} className="fw-bold fs-5"> pts: </FormLabel>
                 </Col>
-                <Col className="col-1">
-                    <FormControl type="number" value={0}
-                    // onChange={(e) => setPoints(Number(e.target.value))}
+                <Col className="col-2">
+                    <FormControl type="number" value={question.points}
+                    onChange={(e) => updateQuestionField(questionIndex, "points", Number(e.target.value))}
                     />
                 </Col>
             </Row><hr />
 
 
-            {questionType === "Multiple Choice" && (
+            {question.question_type === "Multiple Choice" && (
                 <div id="multiple-choice">
                     <div>Enter your question and multiple answers, then select one correct answer.</div><br />
                     <h5 className="fw-bold">Question:</h5>
 
-                    <FormControl as="textarea" rows={5} value="hello" 
-                    // onChange={(e) => setDescription(e.target.value)}
-                    /><br />
+                    <FormControl as="textarea" rows={5} value={question.question}
+                        onChange={(e) => updateQuestionField(questionIndex, "question", e.target.value)}/>
+                    <br />
 
                     <h5 className="fw-bold">Answers:</h5><br />
 
-                    {answerChoices.map((answerChoice, index) => (
-                        <Row key={index}>
+                    {question.multiple_choice.map((mcqChoice, choiceIndex) => (
+                        <Row>
                             <Col className="fs-5 col-1">
-                                <FormCheck type="radio" name="Correct Answer" 
-                                checked={answerChoice.isCorrect}
-                                onChange={() => setCorrectAnswer(index)}>
+                                <FormCheck type="radio" name={`correctAnswer-${questionIndex}`} 
+                                checked={mcqChoice.isCorrect}
+                                onChange={() => setMCQCorrectAnswer(questionIndex, choiceIndex)}>
                                 </FormCheck>
                             </Col>
                             <Col className="text-end col-3 fs-5">Possible Answer</Col>
                             <Col className="col-4 fs-5 mb-3">
                                 <FormControl
-                                    value={answerChoice.text}
-                                    onChange={(e) => updateAnswerChoice(index, e.target.value)}>
+                                    value={mcqChoice.text}
+                                    onChange={(e) => updateMCQChoice(questionIndex, choiceIndex, e.target.value)}>
                                 </FormControl>
                             </Col>
                             <Col className="ms-5">
                                 <FaTrash size={23}
-                                onClick={() => deleteAnswerChoice(index)}/>
+                                onClick={() => deleteMCQChoice(questionIndex, choiceIndex)}/>
                             </Col>
                         </Row>
                     ))}
 
                     <div className="d-flex justify-content-end mb-4">
                         <Button className="me-3 mb-3 btn btn-secondary position-relative"
-                            onClick={() => addAnswerChoice()}>
+                            onClick={() => addMCQChoice(questionIndex)}>
                             <span className="me-1 text-red"><FaPlus size={15}/></span>
                             Add Another Answer
                         </Button><br />
@@ -154,35 +224,34 @@ export default function QuizQuestionsEditor() {
             )}
 
 
-            {questionType === "True/False" && (
+            {question.question_type === "True/False" && (
                 <div id="true-false">
                     <div>Enter your question text, then select if True or False is the correct answer.</div><br />
                     <h5 className="fw-bold">Question:</h5>
 
-                    <FormControl as="textarea" rows={5} value="hello" 
-                    // onChange={(e) => setDescription(e.target.value)}
-                    /><br />
+                    <FormControl as="textarea" rows={5} value={question.question}
+                        onChange={(e) => updateQuestionField(questionIndex, "question", e.target.value)}/><br />
 
                     <h5 className="fw-bold">Answers:</h5>
                     <FormCheck
                         type="radio"
                         label="True"
-                        name="trueFalse"
-                        checked={trueFalseAnswer === true}
-                        onChange={() => setTrueFalseAnswer(true)}
+                        name={`trueFalse-${questionIndex}`}
+                        checked={question.trueFalseAnswer === true}
+                        onChange={() => setTrueFalseAnswer(questionIndex, true)}
                     />
 
                     <FormCheck
                         type="radio"
                         label="False"
-                        name="trueFalse"
-                        checked={trueFalseAnswer === false}
-                        onChange={() => setTrueFalseAnswer(false)}
+                        name={`trueFalse-${questionIndex}`}
+                        checked={question.trueFalseAnswer === false}
+                        onChange={() => setTrueFalseAnswer(questionIndex, false)}
                     />
                 </div>
             )}
 
-            {questionType === "Fill in the Blank" && (
+            {question.question_type === "Fill in the Blank" && (
                 <div id="fill-in-the-blank">
                     <span>Enter your question text, then define all correct answers for the blank.
                     </span><br />
@@ -190,30 +259,30 @@ export default function QuizQuestionsEditor() {
                     <br /><br />
                     <h5 className="fw-bold">Question:</h5>
 
-                    <FormControl as="textarea" rows={5} value="hello" 
-                    // onChange={(e) => setDescription(e.target.value)}
-                    /><br />
+                    <FormControl as="textarea" rows={5} value={question.question}
+                        onChange={(e) => updateQuestionField(questionIndex, "question", e.target.value)}/><br />
 
 
                     <h5 className="fw-bold">Answers:</h5><br />
-                    <div>
+                    {question.blanks.map((blank, blankIndex) => (
                         <Row>
                             <Col className="text-end col-3 fs-5">Possible Answer</Col>
-                            <Col className="col-4 fs-5">
-                                <FormControl>
-                                    
+                            <Col className="col-4 fs-5 mb-3">
+                                <FormControl
+                                    value={blank}
+                                    onChange={(e) => updateFillInBlankChoice(questionIndex, blankIndex, e.target.value)}>
                                 </FormControl>
                             </Col>
                             <Col className="ms-5">
-                                <FaTrash size={23}/>
+                                <FaTrash size={23}
+                                onClick={() => deleteFillInBlankChoice(questionIndex, blankIndex)}/>
                             </Col>
                         </Row>
-                    </div><br />
-                    
+                    ))}
 
                     <div className="d-flex justify-content-end mb-4">
                         <Button className="me-3 mb-3 btn btn-secondary position-relative"
-                            onClick={() => addAnswerChoice()}>
+                            onClick={() => addFillInBlankChoice(questionIndex)}>
                             <span className="me-1 text-red"><FaPlus size={15}/></span>
                             Add Another Answer
                         </Button><br />
@@ -231,12 +300,11 @@ export default function QuizQuestionsEditor() {
                     className="me-2 btn btn-danger position-relative">
                         Save Question
                 </Link>
-            </div>
+            </div><hr />
         </div>
-        )}
+        ))}
 
-
-        <div className="mt-2">
+        <div className="mt-4">
             <Link href={`/courses/${cid}/quizzes`} id="wd-group-btn"
                 className="me-3 btn btn-lg btn-secondary position-relative">
                     Cancel
