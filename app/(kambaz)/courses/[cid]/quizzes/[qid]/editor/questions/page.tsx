@@ -33,7 +33,7 @@ export default function QuizQuestionsEditor() {
         const newQuestion = {
             title: "",
             question: "",
-            points: "",
+            points: 0,
             question_type: "Multiple Choice",
             multiple_choice: [{ text: "", isCorrect: true}, { text: "", isCorrect: false}],
             trueFalseAnswer: null,
@@ -290,7 +290,7 @@ export default function QuizQuestionsEditor() {
                 className="me-3 btn btn-lg btn-secondary position-relative">
                     Cancel
             </Link>
-            <Link href={`/courses/${cid}/quizzes/${qid}/editor`} 
+            <Link href={`/courses/${cid}/quizzes`} 
                 onClick={onSave} 
                 className="me-2 btn btn-lg btn-danger position-relative">
                     Save
