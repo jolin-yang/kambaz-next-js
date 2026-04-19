@@ -9,8 +9,8 @@ export default function QuizPreview() {
 
     return (
         <div id="quiz-preview">
-            <Button href={`/courses/${cid}/quizzes/${qid}`}>
-
+            <Button href={`/courses/${cid}/quizzes/${qid}/editor?tab=questions`} className="btn-lg btn-secondary float-end">
+                Edit Quiz
             </Button>
         </div>
     );}

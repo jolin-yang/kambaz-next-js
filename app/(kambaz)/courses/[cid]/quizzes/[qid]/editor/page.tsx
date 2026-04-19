@@ -1,13 +1,17 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useState } from "react";
 import { Nav, NavItem, NavLink } from "react-bootstrap";
 import QuizDetailsEditor from "./details/page";
 import QuizQuestionsEditor from "./questions/page";
+import { SearchParams } from "next/dist/server/request/search-params";
+import { useSearchParams } from "next/navigation";
 
 export default function QuizEditor() {
-    const [tab, setTab] = useState("Details");
+    const searchParams = useSearchParams();
+    const tabParameter = searchParams.get("tab");
+    
+    const [tab, setTab] = useState((tabParameter === "questions") ? "Questions" : "Details");
 
     return (
         <div id="quiz-editor">
