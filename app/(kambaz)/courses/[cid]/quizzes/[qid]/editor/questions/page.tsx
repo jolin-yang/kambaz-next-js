@@ -377,7 +377,7 @@ export default function QuizQuestionsEditor() {
                 className="me-3 btn btn-lg btn-secondary position-relative">
                     Cancel
             </Link>
-            <Link href={`/courses/${cid}/quizzes`} 
+            <Link href={`/courses/${cid}/quizzes/${qid}`} 
                 onClick={onSave} 
                 className="me-2 btn btn-lg btn-danger position-relative">
                     Save
