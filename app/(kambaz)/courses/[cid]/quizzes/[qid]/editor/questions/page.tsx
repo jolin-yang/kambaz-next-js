@@ -16,6 +16,7 @@ export default function QuizQuestionsEditor() {
 
     const [questions, setQuestions] = useState<any[]>([]);
     const [editMode, setEditMode] = useState<boolean[]>([]);
+    const [questionsPrevState, setQuestionsPrevState] = useState<any[]>([]);
 
     const dispatch = useDispatch();
     const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
@@ -151,10 +152,24 @@ export default function QuizQuestionsEditor() {
 
         setEditMode(updatedEditMode);
     }
+
+    const onCancelQuestion = (questionIndex: number) => {
+        if (!questionsPrevState[questionIndex]) {
+            setQuestions(questions.filter((_, index) => index !== questionIndex));
+            setEditMode(editMode.filter((_, index) => index !== questionIndex));
+        }
+        else {
+            const restoredQuestions = [...questions];
+            restoredQuestions[questionIndex] = {...questionsPrevState[questionIndex]};   // restore question back to original state before edits
+            setQuestions(restoredQuestions);
+            switchEditMode(questionIndex);
+        }
+    }
      
     useEffect(() => {
         setQuestions(quiz.questions);
         setEditMode(quiz.questions.map(() => false));
+        setQuestionsPrevState(quiz.questions);
     }, []);
 
   
@@ -308,11 +323,12 @@ export default function QuizQuestionsEditor() {
                     <div className="mt-4">
                         <Button 
                             className="me-2 btn btn-secondary position-relative"
-                                onClick={() => switchEditMode(questionIndex)}>
+                                onClick={() => onCancelQuestion(questionIndex)}>
                                 Cancel
                         </Button>
                         <Button
-                            className="me-2 btn btn-danger position-relative">
+                            className="me-2 btn btn-danger position-relative"
+                                onClick={() => switchEditMode(questionIndex)}>
                                 Save Question
                         </Button>
                     </div><hr /><br /><br />
