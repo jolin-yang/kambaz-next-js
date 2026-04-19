@@ -46,7 +46,7 @@ export default function QuizQuestionsEditor() {
 
     const updateQuestionType = (questionType: string, questionIndex: number) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].question_type = questionType;
+        updatedQuestions[questionIndex] = { ...updatedQuestions[questionIndex], question_type: questionType };
 
         setQuestions(updatedQuestions);
       };
