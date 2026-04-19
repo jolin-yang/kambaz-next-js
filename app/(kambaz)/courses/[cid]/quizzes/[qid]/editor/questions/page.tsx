@@ -3,11 +3,12 @@
 import * as client from "../../../client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { updateQuiz } from "../../../reducer";
 import { FormLabel, Col, FormControl, Row, FormSelect, FormCheck, Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@reduxjs/toolkit/query";
 
 
 export default function QuizQuestionsEditor() {
@@ -17,12 +18,12 @@ export default function QuizQuestionsEditor() {
     const [editMode, setEditMode] = useState(false);
 
     const dispatch = useDispatch();
+    const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
+        (q : any) => q._id === qid)) as any;    
 
     const onSave = async () => {
         const updatedQuiz = {
-          _id: qid,
-          course: cid,
-          questions
+          ...quiz, questions
         };
 
         await client.updateQuiz(updatedQuiz);
@@ -61,7 +62,6 @@ export default function QuizQuestionsEditor() {
     const addMCQChoice = (questionIndex: number) => {
         const updatedQuestions = [...questions];
 
-        // updatedQuestions[questionIndex].multiple_choice.push({ text: "", isCorrect: false});
         updatedQuestions[questionIndex] = { 
             ...updatedQuestions[questionIndex], 
             multiple_choice: [...updatedQuestions[questionIndex].multiple_choice, { text: "", isCorrect: false }]};
@@ -72,7 +72,6 @@ export default function QuizQuestionsEditor() {
     const addFillInBlankChoice = (questionIndex: number) => {
         const updatedQuestions = [...questions];
 
-        // updatedQuestions[questionIndex].blanks.push("");
         updatedQuestions[questionIndex] = { 
             ...updatedQuestions[questionIndex], 
             blanks: [...updatedQuestions[questionIndex].blanks, ""]};
@@ -82,47 +81,70 @@ export default function QuizQuestionsEditor() {
 
     const updateMCQChoice = (questionIndex: number, choiceIndex: number, newValue: string) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].multiple_choice[choiceIndex].text = newValue;
+        updatedQuestions[questionIndex] = {
+            ...updatedQuestions[questionIndex],
+            multiple_choice: updatedQuestions[questionIndex].multiple_choice.map((choice, index) => (
+                (index === choiceIndex) ? {...choice, text: newValue} : choice 
+            ))
+        }
 
         setQuestions(updatedQuestions);
     };
 
     const updateFillInBlankChoice = (questionIndex: number, choiceIndex: number, newValue: string) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].blanks[choiceIndex] = newValue;
-
+        updatedQuestions[questionIndex] = {
+            ...updatedQuestions[questionIndex],
+            blanks: updatedQuestions[questionIndex].blanks.map((blank, index) => (
+                (index === choiceIndex) ? newValue : blank 
+            ))
+        }
         setQuestions(updatedQuestions);
     };
 
     const deleteMCQChoice = (questionIndex: number, choiceIndex: number) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].multiple_choice = updatedQuestions[questionIndex].multiple_choice.filter((_, index) => index !== choiceIndex);
+        updatedQuestions[questionIndex] = { 
+            ...updatedQuestions[questionIndex], 
+            multiple_choice: updatedQuestions[questionIndex].multiple_choice.filter((_, index) => index !== choiceIndex)};
 
         setQuestions(updatedQuestions);
     };
 
     const deleteFillInBlankChoice = (questionIndex: number, choiceIndex: number) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].blanks = updatedQuestions[questionIndex].blanks.filter((_, index) => index !== choiceIndex);
+        updatedQuestions[questionIndex] = { 
+            ...updatedQuestions[questionIndex], 
+            blanks: updatedQuestions[questionIndex].blanks.filter((_, index) => index !== choiceIndex)};
 
         setQuestions(updatedQuestions);
     };
 
     const setMCQCorrectAnswer = (questionIndex: number, choiceIndex: number) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].multiple_choice = updatedQuestions[questionIndex].multiple_choice.map((choice, index) => (
-            {...choice, isCorrect: index === choiceIndex}
-        ));
+        updatedQuestions[questionIndex] = {
+            ...updatedQuestions[questionIndex],
+            multiple_choice: updatedQuestions[questionIndex].multiple_choice.map((choice, index) => (
+                {...choice, isCorrect: index === choiceIndex}
+            )) 
+        }
 
         setQuestions(updatedQuestions);
     };
 
     const setTrueFalseAnswer = (questionIndex: number, value: boolean) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].trueFalseAnswer = value;
+        updatedQuestions[questionIndex] = {
+            ...updatedQuestions[questionIndex],
+            trueFalseAnswer: value
+        }
 
         setQuestions(updatedQuestions);
-     };
+    };
+     
+    useEffect(() => {
+        setQuestions(quiz.questions);
+    }, []);
 
   
     return (

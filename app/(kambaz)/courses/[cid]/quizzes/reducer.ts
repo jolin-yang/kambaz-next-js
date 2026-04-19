@@ -43,6 +43,9 @@ const quizzesSlice = createSlice({
         q._id === quiz._id ? quiz : q
       ) as any;
     },
+    setQuestions: (state, action) => {
+      state.quizzes = action.payload;
+    },
   },
 });
 
