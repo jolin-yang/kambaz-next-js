@@ -8,7 +8,7 @@ import { FaPlus, FaTrash } from "react-icons/fa6";
 import { updateQuiz } from "../../../reducer";
 import { FormLabel, Col, FormControl, Row, FormSelect, FormCheck, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
+import { RootState } from "@/app/(kambaz)/store";
 
 
 export default function QuizQuestionsEditor() {
@@ -83,7 +83,7 @@ export default function QuizQuestionsEditor() {
         const updatedQuestions = [...questions];
         updatedQuestions[questionIndex] = {
             ...updatedQuestions[questionIndex],
-            multiple_choice: updatedQuestions[questionIndex].multiple_choice.map((choice, index) => (
+            multiple_choice: updatedQuestions[questionIndex].multiple_choice.map((choice: any, index: number) => (
                 (index === choiceIndex) ? {...choice, text: newValue} : choice 
             ))
         }
@@ -95,7 +95,7 @@ export default function QuizQuestionsEditor() {
         const updatedQuestions = [...questions];
         updatedQuestions[questionIndex] = {
             ...updatedQuestions[questionIndex],
-            blanks: updatedQuestions[questionIndex].blanks.map((blank, index) => (
+            blanks: updatedQuestions[questionIndex].blanks.map((blank: string, index: number) => (
                 (index === choiceIndex) ? newValue : blank 
             ))
         }
@@ -106,7 +106,7 @@ export default function QuizQuestionsEditor() {
         const updatedQuestions = [...questions];
         updatedQuestions[questionIndex] = { 
             ...updatedQuestions[questionIndex], 
-            multiple_choice: updatedQuestions[questionIndex].multiple_choice.filter((_, index) => index !== choiceIndex)};
+            multiple_choice: updatedQuestions[questionIndex].multiple_choice.filter((_: any, index: number) => index !== choiceIndex)};
 
         setQuestions(updatedQuestions);
     };
@@ -115,7 +115,7 @@ export default function QuizQuestionsEditor() {
         const updatedQuestions = [...questions];
         updatedQuestions[questionIndex] = { 
             ...updatedQuestions[questionIndex], 
-            blanks: updatedQuestions[questionIndex].blanks.filter((_, index) => index !== choiceIndex)};
+            blanks: updatedQuestions[questionIndex].blanks.filter((_: any, index: number) => index !== choiceIndex)};
 
         setQuestions(updatedQuestions);
     };
@@ -124,7 +124,7 @@ export default function QuizQuestionsEditor() {
         const updatedQuestions = [...questions];
         updatedQuestions[questionIndex] = {
             ...updatedQuestions[questionIndex],
-            multiple_choice: updatedQuestions[questionIndex].multiple_choice.map((choice, index) => (
+            multiple_choice: updatedQuestions[questionIndex].multiple_choice.map((choice: any, index: number) => (
                 {...choice, isCorrect: index === choiceIndex}
             )) 
         }
@@ -157,7 +157,7 @@ export default function QuizQuestionsEditor() {
             </Button><br />
         </div>
 
-        {questions.map((question, questionIndex) => (
+        {questions.map((question: any, questionIndex: number) => (
         <div id="addNewQuestion">
             <Row>
                 <Col className="col-4 gap-1">
@@ -194,7 +194,7 @@ export default function QuizQuestionsEditor() {
 
                     <h5 className="fw-bold">Answers:</h5><br />
 
-                    {question.multiple_choice.map((mcqChoice, choiceIndex) => (
+                    {question.multiple_choice.map((mcqChoice: any, choiceIndex: number) => (
                         <Row>
                             <Col className="fs-5 col-1">
                                 <FormCheck type="radio" name={`correctAnswer-${questionIndex}`} 
@@ -267,7 +267,7 @@ export default function QuizQuestionsEditor() {
 
 
                     <h5 className="fw-bold">Answers:</h5><br />
-                    {question.blanks.map((blank, blankIndex) => (
+                    {question.blanks.map((blank: any, blankIndex: number) => (
                         <Row>
                             <Col className="text-end col-3 fs-5">Possible Answer</Col>
                             <Col className="col-4 fs-5 mb-3">

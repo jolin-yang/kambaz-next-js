@@ -40,7 +40,7 @@ export default function QuizPreview() {
             <h2>Quiz Instructions</h2><hr /><br />
 
 
-            {quiz?.questions.map((question, questionIndex) => 
+            {quiz?.questions.map((question: any, questionIndex: number) => 
               <div className="ms-5">
                 <Card className="ms-5 mb-5 w-75">
                     <CardBody className="ms-2 me-2">
@@ -49,7 +49,7 @@ export default function QuizPreview() {
                         <h6 className="mt-4 mb-4">{question?.question}</h6><hr />
 
                         {question?.question_type === "Multiple Choice" &&
-                            question?.multiple_choice?.map((choice) => (
+                            question?.multiple_choice?.map((choice: any) => (
                                     <FormCheck
                                     className="mb-2"
                                     type="radio"
