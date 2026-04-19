@@ -85,7 +85,6 @@ export default function QuizDetailsEditor() {
         course: cid, 
         description, 
         quiz_type: quizType, 
-        points, 
         assignment_group: assignmentGroup,
         shuffle_answers: shuffleAnswers,
         time_limit: timeLimit,
