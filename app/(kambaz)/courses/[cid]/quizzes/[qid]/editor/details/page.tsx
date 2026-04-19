@@ -32,7 +32,6 @@ export default function QuizDetailsEditor() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [points, setPoints] = useState(0);
   const [quizType, setQuizType] = useState("");
   const [assignmentGroup, setAssignmentGroup] = useState("");
   const [shuffleAnswers, setShuffleAnswers] = useState(true);
@@ -54,7 +53,6 @@ export default function QuizDetailsEditor() {
     
     setTitle(quiz.title);
     setDescription(quiz.description);
-    setPoints(quiz.points);
     setQuizType(quiz.quiz_type);
     setAssignmentGroup(quiz.assignment_group);
     setShuffleAnswers(quiz.shuffle_answers);
@@ -137,7 +135,7 @@ export default function QuizDetailsEditor() {
           <Row className="mb-4">
                 <FormLabel column sm={3} className="text-end"> Points </FormLabel>
                 <Col className="col-4">
-                    <FormControl value={points} onChange={(e) => setPoints(Number(e.target.value))}/>
+                    <FormControl value={quiz?.points}/>
                 </Col>
           </Row>
           <Row className="mb-3">

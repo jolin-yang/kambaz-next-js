@@ -21,9 +21,11 @@ export default function QuizQuestionsEditor() {
     const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
         (q : any) => q._id === qid)) as any;    
 
+    const totalPoints = questions.reduce((currentTotalPoints, q) => currentTotalPoints + (q.points), 0);
+
     const onSave = async () => {
         const updatedQuiz = {
-          ...quiz, questions
+          ...quiz, questions, points: totalPoints
         };
 
         await client.updateQuiz(updatedQuiz);
@@ -142,6 +144,13 @@ export default function QuizQuestionsEditor() {
 
         setQuestions(updatedQuestions);
     };
+
+    const switchEditMode = (questionIndex: number) => {
+        const updatedEditMode = [...editMode];
+        updatedEditMode[questionIndex] = !updatedEditMode[questionIndex];
+
+        setEditMode(updatedEditMode);
+    }
      
     useEffect(() => {
         setQuestions(quiz.questions);
@@ -298,15 +307,15 @@ export default function QuizQuestionsEditor() {
 
                     <div className="mt-4">
                         <Button 
-                            className="me-2 btn btn-secondary position-relative">
+                            className="me-2 btn btn-secondary position-relative"
+                                onClick={() => switchEditMode(questionIndex)}>
                                 Cancel
                         </Button>
                         <Button
-                        // onClick={onSave} 
                             className="me-2 btn btn-danger position-relative">
                                 Save Question
                         </Button>
-                    </div><hr />
+                    </div><hr /><br /><br />
                 </div>
                 :
                 <div className="ms-5">
@@ -315,8 +324,7 @@ export default function QuizQuestionsEditor() {
                             <span className="fs-5">Question {questionIndex + 1}</span>
                             <span>
                             <Button className="float-end btn-danger btn-sm ms-3"
-                            // onClick={() => setEditMode()}
-                            >
+                            onClick={() => switchEditMode(questionIndex)}>
                                 Edit
                             </Button>
                             </span>
