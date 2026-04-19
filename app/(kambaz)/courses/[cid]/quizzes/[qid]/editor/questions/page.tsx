@@ -1,12 +1,13 @@
 "use client"
 
+import * as client from "../../../client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { title } from "process";
 import { useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { updateQuiz } from "../../../reducer";
 import { FormLabel, Col, FormControl, Row, FormSelect, FormCheck, Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 
 
 export default function QuizQuestionsEditor() {
@@ -15,38 +16,18 @@ export default function QuizQuestionsEditor() {
     const [questions, setQuestions] = useState<any[]>([]);
     const [editMode, setEditMode] = useState(false);
 
-    // const onSave = async () => {
-    //     const updatedQuiz = { 
-    //         _id: qid, 
-    //         title, 
-    //         course: cid, 
-    //         description, 
-    //         quiz_type: quizType, 
-    //         points, 
-    //         assignment_group: assignmentGroup,
-    //         shuffle_answers: shuffleAnswers,
-    //         time_limit: timeLimit,
-    //         multiple_attempts: multipleAttempts, 
-    //         show_correct_answers: showCorrectAnswers,
-    //         access_code: accessCode, 
-    //         one_question_at_a_time: oneQuestionAtATime, 
-    //         webcam_required: webcamRequired, 
-    //         lock_questions_after_answering: lockQuestionsAfterAnswering,
-    //         due_date: dueDate, 
-    //         available_date: availableFromDate, 
-    //         until_date: availableUntilDate
-    //     };
-    //     await client.updateQuiz(updatedQuiz);
-    //     dispatch(updateQuiz(updatedQuiz));
-    //   }
+    const dispatch = useDispatch();
 
-    // const onSave = async () => {
-    //     await client.updateQuiz({
-    //       _id: qid,
-    //       course: cid,
-    //       questions
-    //     });
-    //   };
+    const onSave = async () => {
+        const updatedQuiz = {
+          _id: qid,
+          course: cid,
+          questions
+        };
+
+        await client.updateQuiz(updatedQuiz);
+        dispatch(updateQuiz(updatedQuiz));  
+    };
 
     const addNewQuestion = () => {
         const newQuestion = {
@@ -291,15 +272,15 @@ export default function QuizQuestionsEditor() {
             )}
 
             <div className="mt-4">
-                <Link href={`/courses/${cid}/quizzes`} id="wd-group-btn"
+                <Button 
                     className="me-2 btn btn-secondary position-relative">
                         Cancel
-                </Link>
-                <Link href={`/courses/${cid}/quizzes/${qid}/editor`} 
+                </Button>
+                <Button
                 // onClick={onSave} 
                     className="me-2 btn btn-danger position-relative">
                         Save Question
-                </Link>
+                </Button>
             </div><hr />
         </div>
         ))}
@@ -310,7 +291,7 @@ export default function QuizQuestionsEditor() {
                     Cancel
             </Link>
             <Link href={`/courses/${cid}/quizzes/${qid}/editor`} 
-            // onClick={onSave} 
+                onClick={onSave} 
                 className="me-2 btn btn-lg btn-danger position-relative">
                     Save
             </Link>
