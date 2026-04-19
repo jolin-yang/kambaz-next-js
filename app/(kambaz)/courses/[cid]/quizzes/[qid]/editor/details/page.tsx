@@ -107,7 +107,7 @@ export default function QuizDetailsEditor() {
 
     return (
       <div className="px-5 pt-3">
-        <div className="px-5 ms-1">
+        <div className="px-5 ms-1 mt-4">
             <Form>
                 <FormControl value={title} onChange={(e) => setTitle(e.target.value)}/><br />
                 <FormControl as="textarea" rows={8} value={description} onChange={(e) => setDescription(e.target.value)}/><br />

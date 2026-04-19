@@ -152,7 +152,7 @@ export default function QuizQuestionsEditor() {
     return (
       <div className="px-5 pt-3">
         <div className="d-flex justify-content-center mb-4">
-            <Button className="me-3 mb-3 btn btn-lg btn-secondary position-relative"
+            <Button className="mt-4 me-3 mb-4 btn btn-lg btn-secondary position-relative"
                 onClick={() => addNewQuestion()}>
                 <span className="me-1"><FaPlus size={15}/></span>
                 New Question
