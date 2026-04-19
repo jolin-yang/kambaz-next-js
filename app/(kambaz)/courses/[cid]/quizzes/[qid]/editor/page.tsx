@@ -13,12 +13,12 @@ export default function QuizEditor() {
         <div id="quiz-editor">
             <Nav variant="tabs">
                 <NavItem>
-                    <NavLink onClick={() => setTab("Details")}>
+                    <NavLink onClick={() => setTab("Details")} active={tab === "Details"}>
                         Details
                     </NavLink>
                 </NavItem>
                 <NavItem>
-                <NavLink onClick={() => setTab("Questions")}>
+                <NavLink onClick={() => setTab("Questions")} active={tab === "Questions"}>
                         Questions
                     </NavLink>
                 </NavItem>
