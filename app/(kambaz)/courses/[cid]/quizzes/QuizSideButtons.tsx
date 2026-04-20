@@ -50,8 +50,14 @@ export default function QuizSideButtons(
     <div className="float-end">
   
       <span className="me-3">
-            <FaCheckCircle className="text-success fs-3" />
-          </span>
+        {isPublished ?
+            <FaCheckCircle className="text-success fs-3" 
+                onClick={() => togglePublishState()}/>
+            :
+            <FaBan className="text-danger fs-3"
+                onClick={() => togglePublishState()}/>
+        }
+        </span>
     
       <IoEllipsisVertical className="fs-3" onClick={() => toggleMenu()} />
       <QuizDeleteDialog show={show} handleClose={handleClose} 
