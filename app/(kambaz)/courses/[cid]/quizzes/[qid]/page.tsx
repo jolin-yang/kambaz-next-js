@@ -4,7 +4,7 @@ import { RootState } from "../../../../store";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setQuizzes } from "./../reducer";
+import { setQuizzes, updateQuiz } from "./../reducer";
 import * as client from "./../client";
 import Link from "next/link";
 import { TiPencil } from "react-icons/ti";
@@ -16,6 +16,8 @@ export default function QuizDetails() {
 
   const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
     (q : any) => q._id === qid)) as any;
+
+  const [isPublished, setIsPublished] = useState(quiz?.published);
   
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const isFaculty = currentUser?.role !== "STUDENT";
@@ -43,6 +45,16 @@ export default function QuizDetails() {
     }) + " at 12:00am";
   }
 
+  const togglePublishState = async () => {
+    const updatedQuiz = {
+      ...quiz, published: !isPublished
+    };
+
+    await client.updateQuiz(updatedQuiz);
+    dispatch(updateQuiz(updatedQuiz));
+    setIsPublished(!isPublished);
+  }
+
   const fetchQuizzes = async () => {
         const quizzes = await client.findQuizzesForCourse(cid as string);
         dispatch(setQuizzes(quizzes));
@@ -56,12 +68,27 @@ export default function QuizDetails() {
     return (
       <div>
         <div id="wd-quiz-details-buttons" className="d-flex justify-content-center mb-3">
+
+          {isPublished ? 
+            <span id="wd-publish-btn"
+              className="me-3 mb-3 btn btn-lg btn-danger position-relative"
+              onClick={() => togglePublishState()}>
+                Unpublish
+            </span>
+            :
+            <span id="wd-unpublish-btn"
+              className="me-3 mb-3 btn btn-lg btn-success position-relative"
+              onClick={() => togglePublishState()}>
+                Publish
+            </span>
+          }
+
           <Link href={`/courses/${cid}/quizzes/${qid}/preview`} id="wd-preview-btn"
-          className="me-2 mb-3 btn btn-secondary btn-lg position-relative">
+          className="me-3 mb-3 btn btn-secondary btn-lg position-relative">
                   Preview
           </Link>
           <Link href={`/courses/${cid}/quizzes/${qid}/editor`} id="wd-edit-btn"
-          className="me-2 mb-3 btn btn-secondary btn-lg position-relative">
+          className="me-3 mb-3 btn btn-primary btn-lg position-relative">
             <TiPencil size={26}/> Edit
           </Link>
         </div>
