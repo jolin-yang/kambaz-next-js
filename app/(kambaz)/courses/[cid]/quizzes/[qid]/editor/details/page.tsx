@@ -102,6 +102,12 @@ export default function QuizDetailsEditor() {
     dispatch(updateQuiz(updatedQuiz));
   }
 
+  const onSaveAndPublish = async () => {
+    const updatedQuiz = {...quiz, published: true};
+    await client.updateQuiz(updatedQuiz);
+    dispatch(updateQuiz(updatedQuiz));
+  }
+
     return (
       <div className="px-5 pt-3">
         <div className="px-5 ms-1 mt-4">
@@ -282,7 +288,7 @@ export default function QuizDetailsEditor() {
           </Row>
         </div>
         <div>
-            <Link href={`/courses/${cid}/quizzes/`} onClick={onSave} className="float-end me-3 mb-3 btn btn-success position-relative">
+            <Link href={`/courses/${cid}/quizzes/`} onClick={onSaveAndPublish} className="float-end me-3 mb-3 btn btn-success position-relative">
                 Save and Publish
             </Link>
             <Link href={`/courses/${cid}/quizzes/${qid}`} onClick={onSave} className="float-end me-3 mb-5 btn btn-danger position-relative">
