@@ -37,6 +37,7 @@ export default function QuizDetailsEditor() {
   const [shuffleAnswers, setShuffleAnswers] = useState(true);
   const [timeLimit, setTimeLimit] = useState(0);
   const [multipleAttempts, setMultipleAttempts] = useState(false);
+  const [numberOfAttempts, setNumberOfAttempts] = useState(1);
   const [showCorrectAnswers, setShowCorrectAnswers] = useState("");
   const [accessCode, setAccessCode] = useState("");
   const [oneQuestionAtATime, setOneQuestionAtATime] = useState(true);
@@ -103,9 +104,29 @@ export default function QuizDetailsEditor() {
   }
 
   const onSaveAndPublish = async () => {
-    const updatedQuiz = {...quiz, published: true};
+    const updatedQuiz = { 
+      _id: qid, 
+      title, 
+      course: cid, 
+      description, 
+      quiz_type: quizType, 
+      assignment_group: assignmentGroup,
+      shuffle_answers: shuffleAnswers,
+      time_limit: timeLimit,
+      multiple_attempts: multipleAttempts, 
+      show_correct_answers: showCorrectAnswers,
+      access_code: accessCode, 
+      one_question_at_a_time: oneQuestionAtATime, 
+      webcam_required: webcamRequired, 
+      lock_questions_after_answering: lockQuestionsAfterAnswering,
+      due_date: dueDate, 
+      available_date: availableFromDate, 
+      until_date: availableUntilDate,
+      published: true
+    };
     await client.updateQuiz(updatedQuiz);
     dispatch(updateQuiz(updatedQuiz));
+    await fetchQuizzes();
   }
 
     return (
@@ -140,7 +161,8 @@ export default function QuizDetailsEditor() {
           <Row className="mb-4">
                 <FormLabel column sm={3} className="text-end"> Points </FormLabel>
                 <Col className="col-4">
-                    <FormControl value={quiz?.points}/>
+                    <FormControl value={quiz?.points}
+                    readOnly/>
                 </Col>
           </Row>
           <Row className="mb-3">
@@ -160,7 +182,7 @@ export default function QuizDetailsEditor() {
                     </FormCheck>
                 </Col>
           </Row>
-          <Row className="mb-4">
+          <Row className="mb-3">
                 <FormLabel column sm={3}> </FormLabel>
                 <Col className="col-4">
                 <div className="d-flex align-items-center gap-4">
@@ -190,15 +212,34 @@ export default function QuizDetailsEditor() {
                 </div>
                 </Col>
           </Row>
-          <Row className="mb-4">
+          <Row className="mb-5">
                 <FormLabel column sm={3}> </FormLabel>
-                <Col className="col-4">
+                <Col className="col-5">
+                  <div className="d-flex align-items-center gap-4">
                     <FormCheck
                         label="Allow Multiple Attempts"
                         type="checkbox"
                         checked={multipleAttempts}
-                        onChange={(e) => setMultipleAttempts(e.target.checked)}>
-                    </FormCheck>
+                        onChange={(e) => {
+                          setMultipleAttempts(e.target.checked);
+                          if (e.target.checked) {
+                              setNumberOfAttempts(2);
+                          } else {
+                              setNumberOfAttempts(1);
+                          }
+                      }}/>
+                    {numberOfAttempts > 1 && (
+                          <div className="d-flex align-items-center gap-1">
+                            <FormControl
+                                type="number"
+                                value={numberOfAttempts}
+                                onChange={(e) => setNumberOfAttempts(Number(e.target.value))}
+                                style={{ width: "75px" }}>
+                            </FormControl>
+                            <span>Attempts</span>
+                        </div>
+                      )}
+                      </div>
                 </Col>
           </Row>
           <Row className="mb-4">

@@ -42,6 +42,12 @@ export default function QuizSideButtons(
         await client.updateQuiz(updatedQuiz);
         dispatch(updateQuiz(updatedQuiz));  
         setIsPublished(!isPublished);
+        setShowMenu(false);
+    };
+
+    const handleDelete = () => {
+        setShowMenu(false);
+        deleteQuiz();
     };
   
   
@@ -61,7 +67,7 @@ export default function QuizSideButtons(
     
       <IoEllipsisVertical className="fs-3" onClick={() => toggleMenu()} />
       <QuizDeleteDialog show={show} handleClose={handleClose} 
-            quizName={quizName} deleteQuiz={deleteQuiz} />
+            quizName={quizName} deleteQuiz={handleDelete} />
 
         {showMenu && (
         <div className="bg-white border rounded-1 position-absolute ms-2 hover:bg-light z-3">

@@ -10,7 +10,7 @@ import { setQuizzes } from "../../reducer";
 import { RxTriangleLeft, RxTriangleRight } from "react-icons/rx";
 import Link from "next/link";
 import QuizPreviewNavigation from "./QuizPreviewNavigation";
-import { FaCheck, FaXing, FaXmark } from "react-icons/fa6";
+import { FaCheck, FaXmark } from "react-icons/fa6";
 
 
 export default function QuizPreview() {
@@ -31,7 +31,7 @@ export default function QuizPreview() {
           dispatch(setQuizzes(quizzes));
     };
 
-    const onSubmit = () => {
+  const onSubmit = async () => {
         let curr_points = 0;
         for (let i = 0; i < quiz.questions.length; i++) {
             const question = quiz?.questions[i];
@@ -57,11 +57,11 @@ export default function QuizPreview() {
 
         setTotalScore(curr_points);
         setIsSubmitted(true);
-        };
+    };
   
         
   useEffect(() => {
-          fetchQuizzes();
+        fetchQuizzes();
     }, []);
 
     const currentQ = quiz?.questions[currentQuestion];
@@ -79,7 +79,8 @@ export default function QuizPreview() {
                 </Col>
             </Row>
         
-            {!isSubmitted ? 
+        {quiz?.questions.length > 0 ? (
+            !isSubmitted ? 
             <>
             <h2>Quiz Instructions</h2><hr /><br />
             <Row>
@@ -256,6 +257,9 @@ export default function QuizPreview() {
             </div>
             )})}
             </Col>
-            }
+            )
+        :
+        <div></div>
+        }
         </div>
     );}

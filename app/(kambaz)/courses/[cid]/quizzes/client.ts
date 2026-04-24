@@ -31,3 +31,20 @@ export const findQuizById = async (quizId: string) => {
   const { data } = await axios.get(`${QUIZZES_API}/${quizId}`);
   return data;
 }
+
+const QUIZ_ATTEMPTS_API = `${HTTP_SERVER}/api/quizAttempts`;
+
+export const saveNewQuizAttempt = async (attempt: any) => {
+  const response = await axios.post(QUIZ_ATTEMPTS_API, attempt);
+  return response.data;
+};
+
+export const fetchLastAttempt = async (studentId: string, quizId: string) => {
+  const { data } = await axios.get(`${QUIZ_ATTEMPTS_API}/${quizId}/${studentId}`);
+  return data;
+};
+
+export const fetchNumberOfTakenAttempts = async (studentId: string, quizId: string) => {
+  const { data } = await axios.get(`${QUIZ_ATTEMPTS_API}/${quizId}/${studentId}/count`);
+  return data;
+};

@@ -138,7 +138,7 @@ export default function Quizzes() {
                             )}
                                | 
                             <span className="fw-bold"> Due </span>
-                            {convertDueDateToString(quiz.due_date)}     |     {quiz.points} pts   |     {quiz.questions.length} Questions
+                            {convertDueDateToString(quiz?.due_date)}     |     {quiz?.points} pts   |     {quiz?.questions?.length} Questions
                         </div>
                     </div>
                     <div className="d-flex align-items-center ms-auto">

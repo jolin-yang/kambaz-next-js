@@ -19,47 +19,78 @@ export default function TakeQuiz() {
   const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
     (q : any) => q._id === qid)) as any;
 
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [shuffleAnswerQuestions, setShuffleAnswerQuestions] = useState<any[]>([]);
   const [submittedAnswers, setSubmittedAnswers] = useState<{[key: string]: string}>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [totalScore, setTotalScore] = useState(0);
+  const [lastAttempt, setLastAttempt] = useState<any>(null);
+  const [attemptCount, setAttemptCount] = useState(0);
 
   const fetchQuizzes = async () => {
           const quizzes = await client.findQuizzesForCourse(cid as string);
           dispatch(setQuizzes(quizzes));
     };
 
-  const onSubmit = () => {
-    let curr_points = 0;
-    for (let i = 0; i < quiz.questions.length; i++) {
-        const question = quiz?.questions[i];
+  const fetchLastAttempt = async () => {
+        const attempt = await client.fetchLastAttempt(currentUser._id as string, qid as string);
+        setLastAttempt(attempt);
+    };
 
-        if (question.question_type == "True/False") {
-            const correctAnswer = question.trueFalseAnswer ? "True" : "False";
-            if (submittedAnswers[question._id] === correctAnswer) {
-                curr_points += question.points;
-            }
-        }
-        else if (question.question_type == "Multiple Choice") {
-            const correctOption = question.multiple_choice.find((c: any) => c.isCorrect);
-            if (submittedAnswers[question._id] === correctOption.text) {
-                curr_points += question.points;
-            }
-        }
-        else {
-            if (question.blanks.includes(submittedAnswers[question._id])) {
-                curr_points += question.points;
-            }
-        }
-    }
+  const fetchNumberOfTakenAttempts = async () => {
+        const count = await client.fetchNumberOfTakenAttempts(currentUser._id as string, qid as string);
+        console.log(attemptCount);
+        setAttemptCount(count);
+    };
 
-    setTotalScore(curr_points);
-    setIsSubmitted(true);
+  const onSubmit = async () => {
+        let curr_points = 0;
+        for (let i = 0; i < quiz.questions.length; i++) {
+            const question = quiz?.questions[i];
+
+            if (question.question_type == "True/False") {
+                const correctAnswer = question.trueFalseAnswer ? "True" : "False";
+                if (submittedAnswers[question._id] === correctAnswer) {
+                    curr_points += question.points;
+                }
+            }
+            else if (question.question_type == "Multiple Choice") {
+                const correctOption = question.multiple_choice.find((c: any) => c.isCorrect);
+                if (submittedAnswers[question._id] === correctOption.text) {
+                    curr_points += question.points;
+                }
+            }
+            else {
+                if (question.blanks.includes(submittedAnswers[question._id])) {
+                    curr_points += question.points;
+                }
+            }
+        }
+
+        setTotalScore(curr_points);
+        setIsSubmitted(true);
+
+        if (currentUser.role == "STUDENT") {
+            await client.saveNewQuizAttempt({
+                quizId: qid,
+                studentId: currentUser._id,
+                answers: submittedAnswers,
+                score: curr_points
+            })
+        }
+
+        setAttemptCount(attemptCount + 1);
   };
   
+
   useEffect(() => {
-        fetchQuizzes();
+    fetchQuizzes();
+        if (currentUser.role == "STUDENT") {
+            fetchLastAttempt();
+            fetchNumberOfTakenAttempts();
+        }
     }, []);
 
     useEffect(() => {
@@ -72,16 +103,41 @@ export default function TakeQuiz() {
             }));
             setShuffleAnswerQuestions(questions);
         }
-      }, [quiz]);      
+    }, [quiz]);      
 
-      const currentQ = shuffleAnswerQuestions[currentQuestion];
+
+    useEffect(() => {
+        if (lastAttempt) {
+          setSubmittedAnswers(lastAttempt.answers);
+          setTotalScore(lastAttempt.score);
+          setIsSubmitted(true);
+        }
+    }, [lastAttempt]);
+
+
+    const currentQ = shuffleAnswerQuestions[currentQuestion];
 
       return (
         <div id="quiz-preview">
-            <Row>
+            <Row className="">
                 <Col>
                     <h2 className="mt-2">{quiz?.title}</h2><br />
                 </Col>
+                {(attemptCount < quiz?.number_attempts && isSubmitted) ?
+                <>
+                <Col className="d-flex justify-content-center">
+                    <Button className="btn btn-lg btn-danger mt-3 mb-5" onClick={() => {
+                        setIsSubmitted(false);
+                        setSubmittedAnswers({});
+                        }}>
+                        Retake Quiz  
+                    </Button>
+                </Col>
+                <Col></Col>
+                </>
+                :
+                null
+                }
             </Row>
         
             {!isSubmitted ? 
