@@ -23,6 +23,9 @@ export default function Quizzes() {
   const { quizzes } = useSelector((state: RootState) => state.quizzesReducer);
   const dispatch = useDispatch();
 
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const isFaculty = currentUser?.role !== "STUDENT";
+
   function convertDueDateToString(date: string) {
     if (!date) {
       return "";
@@ -82,12 +85,14 @@ export default function Quizzes() {
     return (
       <div className="pt-3">
         
-        {quizzes.length === 0 && (
-            <div className="text-end fs-4 mb-3">
-                {/* There are no quizzes yet. Click the <b>+ Quiz</b> button to add a quiz. */}
-                <NoQuizDialog show={show} handleClose={handleClose}/>
-            </div>
-        )}
+        {isFaculty && (
+          quizzes.length === 0 && (
+              <div className="text-end fs-4 mb-3">
+                  {/* There are no quizzes yet. Click the <b>+ Quiz</b> button to add a quiz. */}
+                  <NoQuizDialog show={show} handleClose={handleClose}/>
+              </div>
+          ))
+      }
         
         <AddQuizButton /><br /><br /><br /><br />
         <ListGroup className="rounded-0" id="wd-quizzes">
@@ -108,10 +113,19 @@ export default function Quizzes() {
                     </div>
                     <div className="me-5">
                       <div className="fw-bold">
-                        <Link href={`/courses/${cid}/quizzes/${quiz._id}`}
+
+                        {isFaculty || quiz.published ? 
+                        <Link href={`/courses/${cid}/quizzes/${quiz._id}` }
                         className="text-dark text-decoration-none">
                         {quiz.title}
                         </Link>
+                        :
+                        <span
+                        className="text-dark text-decoration-none">
+                        {quiz.title}
+                        </span>
+                        }
+
                       </div>
                         <div className="fs-6">
                             <span className="fw-bold"> 

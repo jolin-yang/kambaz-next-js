@@ -9,10 +9,10 @@ import { useEffect, useState } from "react";
 import { setQuizzes } from "../../reducer";
 import { RxTriangleLeft, RxTriangleRight } from "react-icons/rx";
 import Link from "next/link";
-import QuizPreviewNavigation from "./QuizPreviewNavigation";
+import QuizPreviewNavigation from "../preview/QuizPreviewNavigation";
 
 
-export default function QuizPreview() {
+export default function TakeQuiz() {
   const { cid, qid } = useParams();
   const dispatch = useDispatch();
 
@@ -31,15 +31,10 @@ export default function QuizPreview() {
     }, []);
 
     return (
-        <div id="quiz-preview">
+        <div id="take-quiz">
             <Row>
                 <Col>
                     <h2 className="mt-2">{quiz?.title}</h2><br />
-                </Col>
-                <Col>
-                    <Link href={`/courses/${cid}/quizzes/${qid}/editor?tab=questions`} className="btn btn-lg btn-primary float-end">
-                        Edit Quiz
-                    </Link>
                 </Col>
             </Row>
         

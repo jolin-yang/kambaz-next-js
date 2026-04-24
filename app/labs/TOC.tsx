@@ -41,7 +41,7 @@ export default function TOC() {
      <NavItem>
        <NavLink href="https://github.com/jolin-yang/kambaz-node-server-app/tree/quizzes" id="wd-github">Server repo</NavLink>
      </NavItem><NavItem>
-       <NavLink href="https://kambaz-node-server-app-ohyp.onrender.com" id="wd-github">Root of server</NavLink>
+       <NavLink href="https://kambaz-node-server-app-1-iabg.onrender.com" id="wd-github">Root of server</NavLink>
      </NavItem>
    </Nav>
 );}

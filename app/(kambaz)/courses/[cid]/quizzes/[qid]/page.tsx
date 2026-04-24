@@ -21,7 +21,6 @@ export default function QuizDetails() {
   
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const isFaculty = currentUser?.role !== "STUDENT";
-  const isStudent = !isFaculty;
 
   function convertDueDateToString(date: string) {
     if (!date) {
@@ -64,11 +63,20 @@ export default function QuizDetails() {
         fetchQuizzes();
   }, []);
 
+  useEffect(() => {
+    if (quiz) {
+      setIsPublished(quiz.published);
+    }
+  }, [quiz]);
+
 
     return (
       <div>
-        <div id="wd-quiz-details-buttons" className="d-flex justify-content-center mb-3">
 
+        <div id="wd-quiz-details-buttons" className="d-flex justify-content-center mt-2 mb-3">
+          
+        {isFaculty ? (
+          <>
           {isPublished ? 
             <span id="wd-publish-btn"
               className="me-3 mb-3 btn btn-lg btn-danger position-relative"
@@ -91,7 +99,16 @@ export default function QuizDetails() {
           className="me-3 mb-3 btn btn-primary btn-lg position-relative">
             <TiPencil size={26}/> Edit
           </Link>
+          </>)
+          :
+          <Link href={`/courses/${cid}/quizzes/${qid}/take`} id="wd-take-quiz-btn"
+          className="me-3 mb-3 btn btn-danger btn-lg position-relative">
+                  Take Quiz
+          </Link>
+          }
         </div>
+
+
         <h2>{quiz?.title}</h2><br />
 
         <div className="ms-2 mb-4">
