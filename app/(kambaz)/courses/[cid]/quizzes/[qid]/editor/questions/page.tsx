@@ -148,6 +148,22 @@ export default function QuizQuestionsEditor() {
 
     const switchEditMode = (questionIndex: number) => {
         const updatedEditMode = [...editMode];
+
+        if (!updatedEditMode[questionIndex]) {
+            const q = questions[questionIndex];
+    
+            const snapshot = {
+                ...q,
+                multiple_choice: q.multiple_choice?.map((c: any) => ({ ...c })),
+                blanks: q.blanks ? [...q.blanks] : [],
+            };
+    
+            const updatedPrev = [...questionsPrevState];
+            updatedPrev[questionIndex] = snapshot;
+    
+            setQuestionsPrevState(updatedPrev);
+        }
+
         updatedEditMode[questionIndex] = !updatedEditMode[questionIndex];
 
         setEditMode(updatedEditMode);
