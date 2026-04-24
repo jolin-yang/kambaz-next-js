@@ -130,7 +130,12 @@ export default function QuizDetails() {
           </Row>
           <Row className="mb-3 fs-5"> 
             <Col className="col-4 fw-bold text-end">Time Limit</Col>
-            <Col>{quiz?.time_limit} Minutes</Col>
+            <Col>
+            {quiz?.time_limit > 0 ? `${quiz?.time_limit} Minutes`
+            :
+            "None"
+            }
+            </Col>
           </Row>
           <Row className="mb-3 fs-5"> 
             <Col className="col-4 fw-bold text-end">Multiple Attempts</Col>
