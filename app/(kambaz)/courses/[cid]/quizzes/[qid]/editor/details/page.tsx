@@ -15,9 +15,6 @@ export default function QuizDetailsEditor() {
     (q : any) => q._id === qid)) as any;
 
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
-  const isFaculty = currentUser?.role !== "STUDENT";
-  const isStudent = !isFaculty;
 
   const properAvailableDateFormat = quiz?.available_date ? 
     quiz.available_date.includes("at") ?
@@ -36,7 +33,6 @@ export default function QuizDetailsEditor() {
   const [assignmentGroup, setAssignmentGroup] = useState("");
   const [shuffleAnswers, setShuffleAnswers] = useState(true);
   const [timeLimit, setTimeLimit] = useState(0);
-  const [multipleAttempts, setMultipleAttempts] = useState(false);
   const [numberOfAttempts, setNumberOfAttempts] = useState(1);
   const [showCorrectAnswers, setShowCorrectAnswers] = useState("");
   const [accessCode, setAccessCode] = useState("");
@@ -58,7 +54,7 @@ export default function QuizDetailsEditor() {
     setAssignmentGroup(quiz.assignment_group);
     setShuffleAnswers(quiz.shuffle_answers);
     setTimeLimit(quiz.time_limit);
-    setMultipleAttempts(quiz.multiple_attempts);
+    setNumberOfAttempts(quiz.number_attempts ?? 1);
     setShowCorrectAnswers(quiz.show_correct_answers);
     setAccessCode(quiz.access_code);
     setOneQuestionAtATime(quiz.one_question_at_a_time);
@@ -89,7 +85,8 @@ export default function QuizDetailsEditor() {
         assignment_group: assignmentGroup,
         shuffle_answers: shuffleAnswers,
         time_limit: timeLimit,
-        multiple_attempts: multipleAttempts, 
+        number_attempts: numberOfAttempts,
+        multiple_attempts: numberOfAttempts > 1,
         show_correct_answers: showCorrectAnswers,
         access_code: accessCode, 
         one_question_at_a_time: oneQuestionAtATime, 
@@ -113,7 +110,8 @@ export default function QuizDetailsEditor() {
       assignment_group: assignmentGroup,
       shuffle_answers: shuffleAnswers,
       time_limit: timeLimit,
-      multiple_attempts: multipleAttempts, 
+      number_attempts: numberOfAttempts,
+      multiple_attempts: numberOfAttempts > 1,
       show_correct_answers: showCorrectAnswers,
       access_code: accessCode, 
       one_question_at_a_time: oneQuestionAtATime, 
@@ -219,14 +217,9 @@ export default function QuizDetailsEditor() {
                     <FormCheck
                         label="Allow Multiple Attempts"
                         type="checkbox"
-                        checked={multipleAttempts}
+                        checked={numberOfAttempts > 1}
                         onChange={(e) => {
-                          setMultipleAttempts(e.target.checked);
-                          if (e.target.checked) {
-                              setNumberOfAttempts(2);
-                          } else {
-                              setNumberOfAttempts(1);
-                          }
+                          setNumberOfAttempts(e.target.checked ? 2 : 1);
                       }}/>
                     {numberOfAttempts > 1 && (
                           <div className="d-flex align-items-center gap-1">
@@ -246,9 +239,9 @@ export default function QuizDetailsEditor() {
                 <FormLabel column sm={3} className="text-end"> Show Correct Answers </FormLabel>
                 <Col className="col-4">
                     <FormSelect value={showCorrectAnswers} onChange={(e) => setShowCorrectAnswers(e.target.value)}>
-                    <option value="Never">Never</option>
                     <option value="Immediately">Immediately</option>
                     <option value="Later">Later</option>
+                    <option value="Never">Never</option>
                     </FormSelect>
                 </Col>
           </Row>
