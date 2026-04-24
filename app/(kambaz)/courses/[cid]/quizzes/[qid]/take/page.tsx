@@ -263,7 +263,7 @@ export default function TakeQuiz() {
                 
                 <Card className="mb-5 me-5" style={{width: '60%', border: `2px solid ${isCorrect ? 'green' : 'red'}`}}>
                     <CardBody className="ms-2 me-2">
-                        <span className="fs-5">Question {index + 1}</span>
+                        <span className="fs-5">{question?.title}</span>
                         <span className="float-end fs-5">{question.points} pts</span>
                         <span  className="float-end me-2">
                             {isCorrect ? <FaCheck color="green" size={27}/> : <FaXmark color="red" size={27}/>}

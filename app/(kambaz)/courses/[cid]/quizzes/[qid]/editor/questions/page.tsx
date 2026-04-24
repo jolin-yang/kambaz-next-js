@@ -353,7 +353,7 @@ export default function QuizQuestionsEditor() {
                 <div className="ms-5">
                     <Card className="ms-5 mb-5 w-75">
                         <CardBody className="ms-2 me-2">
-                            <span className="fs-5">Question {questionIndex + 1}</span>
+                            <span className="fs-5">{question?.title}</span>
                             <span>
                             <Button className="float-end btn-danger btn-sm ms-3"
                             onClick={() => switchEditMode(questionIndex)}>
