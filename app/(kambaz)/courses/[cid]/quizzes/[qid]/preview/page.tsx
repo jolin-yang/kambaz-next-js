@@ -16,6 +16,8 @@ export default function QuizPreview() {
   const { cid, qid } = useParams();
   const dispatch = useDispatch();
 
+  const [submittedAnswers, setSubmittedAnswers] = useState([]);
+
   const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
     (q : any) => q._id === qid)) as any;
 

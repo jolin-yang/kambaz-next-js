@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { setQuizzes } from "../../reducer";
 import { RxTriangleLeft, RxTriangleRight } from "react-icons/rx";
-import Link from "next/link";
 import QuizPreviewNavigation from "../preview/QuizPreviewNavigation";
 
 
@@ -20,15 +19,46 @@ export default function TakeQuiz() {
     (q : any) => q._id === qid)) as any;
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [shuffleAnswerQuestions, setShuffleAnswerQuestions] = useState<any[]>([]);
 
   const fetchQuizzes = async () => {
           const quizzes = await client.findQuizzesForCourse(cid as string);
           dispatch(setQuizzes(quizzes));
     };
+
+  const onSubmit = () => {
+    let curr_points = 0;
+    for (let i = 0; i < quiz.questions.length; i++) {
+        const question = shuffleAnswers[i];
+
+        if (question.question_type == "True/False") {
+
+        }
+        else if (question.question_type == "Multiple Choice") {
+
+        }
+        // else {
+        //     if (submittedAnswers[question._id] == question)
+        // }
+    }
+
+  };
   
   useEffect(() => {
-          fetchQuizzes();
+        fetchQuizzes();
     }, []);
+
+    useEffect(() => {
+        if (quiz?.questions) {
+            const questions = quiz.questions.map((q: any) => ({
+                ...q,
+                multiple_choice: quiz.shuffle_answers ? 
+                [...q.multiple_choice].sort(() => Math.random() - 0.5)
+                : q.multiple_choice
+            }));
+            setShuffleAnswerQuestions(questions);
+        }
+      }, [quiz]);      
 
     return (
         <div id="take-quiz">
@@ -42,7 +72,7 @@ export default function TakeQuiz() {
 
             <Row>
                 <Col className="col-2">
-                    <QuizPreviewNavigation questions={quiz?.questions} 
+                    <QuizPreviewNavigation questions={shuffleAnswerQuestions} 
                         currentQuestion={currentQuestion} 
                         setCurrentQuestion={setCurrentQuestion}/>
                 </Col>
@@ -55,7 +85,7 @@ export default function TakeQuiz() {
                             <h5 className="mt-4 mb-4">{quiz?.questions[currentQuestion].question}</h5><hr />
 
                             {quiz?.questions[currentQuestion].question_type === "Multiple Choice" &&
-                                quiz?.questions[currentQuestion].multiple_choice?.map((choice: any) => (
+                                shuffleAnswerQuestions[currentQuestion]?.multiple_choice?.map((choice: any) => (
                                         <FormCheck
                                             className="mb-2 fs-5"
                                             type="radio"
@@ -120,7 +150,7 @@ export default function TakeQuiz() {
                 </div><br />
 
                 <div className="me-5 float-end pb-4">
-                    <Button className="d-flex align-items-center btn btn-lg btn-danger">
+                    <Button className="d-flex align-items-center btn btn-lg btn-danger" onClick={onSubmit}>
                         Submit Quiz
                     </Button>
                 </div>
