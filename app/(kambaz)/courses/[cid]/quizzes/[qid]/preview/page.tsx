@@ -10,6 +10,7 @@ import { setQuizzes } from "../../reducer";
 import { RxTriangleLeft, RxTriangleRight } from "react-icons/rx";
 import Link from "next/link";
 import QuizPreviewNavigation from "./QuizPreviewNavigation";
+import { FaCheck, FaXing, FaXmark } from "react-icons/fa6";
 
 
 export default function QuizPreview() {
@@ -78,14 +79,16 @@ export default function QuizPreview() {
                 </Col>
             </Row>
         
+            {!isSubmitted ? 
+            <>
             <h2>Quiz Instructions</h2><hr /><br />
-
             <Row>
                 <Col className="col-2">
                     <QuizPreviewNavigation questions={quiz?.questions} 
                         currentQuestion={currentQuestion} 
                         setCurrentQuestion={setCurrentQuestion}/>
                 </Col>
+
                 <Col>
                     <div className="ms-5">
                     <Card className="ms-5 mb-5 w-75">
@@ -169,5 +172,90 @@ export default function QuizPreview() {
                     </Button>
                 </div>
             </div> 
+            </>
+            :
+            <Col>
+            <h3 className="d-flex justify-content-center mb-5">Score: {totalScore}/{quiz?.points}</h3>
+            {quiz?.questions.map((question: any, index: number) => {
+                let isCorrect = false;
+                if (question.question_type == "True/False") {
+                    const correctAnswer = question.trueFalseAnswer ? "True" : "False";
+                    if (submittedAnswers[question._id] === correctAnswer) {
+                        isCorrect = true;
+                    }
+                }
+                else if (question.question_type == "Multiple Choice") {
+                    const correctOption = question.multiple_choice.find((c: any) => c.isCorrect);
+                    if (submittedAnswers[question._id] === correctOption.text) {
+                        isCorrect = true;
+                    }
+                }
+                else {
+                    if (question.blanks.includes(submittedAnswers[question._id])) {
+                        isCorrect = true;
+                    }
+                }
+
+                return (
+
+                <div className="d-flex justify-content-center ms-5">
+                
+                <Card className="mb-5 me-5" style={{width: '60%', border: `2px solid ${isCorrect ? 'green' : 'red'}`}}>
+                    <CardBody className="ms-2 me-2">
+                        <span className="fs-5">Question {index + 1}</span>
+                        <span className="float-end fs-5">{question.points} pts</span>
+                        <span  className="float-end me-2">
+                            {isCorrect ? <FaCheck color="green" size={27}/> : <FaXmark color="red" size={27}/>}
+                        </span><hr />
+                        <h5 className="mt-4 mb-4">{question.question}</h5><hr />
+
+                        {question.question_type === "Multiple Choice" &&
+                            question.multiple_choice?.map((choice: any) => (
+                                    <FormCheck 
+                                        checked = {submittedAnswers[question._id] === choice.text}
+                                        className="mb-2 fs-5"
+                                        type="radio"
+                                        label={choice.text}
+                                        name={`choice-${index}`}
+                                        readOnly>
+                                    </FormCheck>                                
+                            ))
+                        }
+
+                        {question.question_type === "True/False" && (
+                            <div>
+                                <FormCheck 
+                                    checked = {submittedAnswers[question._id] === "True"}
+                                    className="mb-2 fs-5"
+                                    type="radio"
+                                    label="True"
+                                    name={`choice-${index}`}
+                                    readOnly>
+                                </FormCheck>   
+                                <FormCheck 
+                                    checked = {submittedAnswers[question._id] === "False"}
+                                    className="mb-2 fs-5"
+                                    type="radio"
+                                    label="False"
+                                    name={`choice-${index}`}
+                                    readOnly>
+                                </FormCheck>  
+                            </div>                              
+                            )
+                        }
+
+                        {question.question_type === "Fill in the Blank" &&
+                            <FormControl 
+                                value={submittedAnswers[question._id]}
+                                className="mt-4 mb-2 w-50 fs-5"
+                                readOnly>
+                            </FormControl>
+                        }
+                    </CardBody>
+                </Card>
+            </div>
+            )})}
+            </Col>
+            }
         </div>
     );}
