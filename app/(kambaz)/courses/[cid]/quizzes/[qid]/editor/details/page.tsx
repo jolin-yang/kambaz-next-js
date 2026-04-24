@@ -27,6 +27,12 @@ export default function QuizDetailsEditor() {
       : quiz.due_date
     : "";
 
+  const properUntilDateFormat = quiz?.until_date ?
+    quiz.until_date.includes("at") ?
+      new Date(quiz.until_date.split(" at")[0] + " 2026").toISOString().slice(0, 10) 
+      : quiz.until_date
+    : "";
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [quizType, setQuizType] = useState("");
@@ -62,7 +68,7 @@ export default function QuizDetailsEditor() {
     setLockQuestionsAfterAnswering(quiz.lock_questions_after_answering);
     setAvailableFromDate(properAvailableDateFormat);
     setDueDate(properDueDateFormat);
-    setAvailableUntilDate(properDueDateFormat);
+    setAvailableUntilDate(properUntilDateFormat);
   }, [quiz]);
   
 
