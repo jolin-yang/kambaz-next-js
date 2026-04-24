@@ -154,7 +154,7 @@ export default function TakeQuiz() {
                     <div className="ms-5">
                     <Card className="ms-5 mb-5 w-75">
                         <CardBody className="ms-2 me-2">
-                            <span className="fs-5">Question {currentQuestion + 1}</span>
+                            <span className="fs-5">{quiz?.questions[currentQuestion]?.title}</span>
                             <span className="float-end fs-5">{quiz?.questions[currentQuestion].points} pts</span><hr />
                             <h5 className="mt-4 mb-4">{quiz?.questions[currentQuestion].question}</h5><hr />
 
