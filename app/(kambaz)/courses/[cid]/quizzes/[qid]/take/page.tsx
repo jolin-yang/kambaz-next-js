@@ -20,6 +20,9 @@ export default function TakeQuiz() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [shuffleAnswerQuestions, setShuffleAnswerQuestions] = useState<any[]>([]);
+  const [submittedAnswers, setSubmittedAnswers] = useState<{[key: string]: string}>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [totalScore, setTotalScore] = useState(0);
 
   const fetchQuizzes = async () => {
           const quizzes = await client.findQuizzesForCourse(cid as string);
@@ -29,19 +32,29 @@ export default function TakeQuiz() {
   const onSubmit = () => {
     let curr_points = 0;
     for (let i = 0; i < quiz.questions.length; i++) {
-        const question = shuffleAnswers[i];
+        const question = quiz?.questions[i];
 
         if (question.question_type == "True/False") {
-
+            const correctAnswer = question.trueFalseAnswer ? "True" : "False";
+            if (submittedAnswers[question._id] === correctAnswer) {
+                curr_points += question.points;
+            }
         }
         else if (question.question_type == "Multiple Choice") {
-
+            const correctOption = question.multiple_choice.find((c: any) => c.isCorrect);
+            if (submittedAnswers[question._id] === correctOption.text) {
+                curr_points += question.points;
+            }
         }
-        // else {
-        //     if (submittedAnswers[question._id] == question)
-        // }
+        else {
+            if (question.blanks.includes(submittedAnswers[question._id])) {
+                curr_points += question.points;
+            }
+        }
     }
 
+    setTotalScore(curr_points);
+    setIsSubmitted(true);
   };
   
   useEffect(() => {
@@ -59,6 +72,8 @@ export default function TakeQuiz() {
             setShuffleAnswerQuestions(questions);
         }
       }, [quiz]);      
+
+      const currentQ = shuffleAnswerQuestions[currentQuestion];
 
     return (
         <div id="take-quiz">
@@ -86,7 +101,8 @@ export default function TakeQuiz() {
 
                             {quiz?.questions[currentQuestion].question_type === "Multiple Choice" &&
                                 shuffleAnswerQuestions[currentQuestion]?.multiple_choice?.map((choice: any) => (
-                                        <FormCheck
+                                        <FormCheck onChange={() => setSubmittedAnswers({...submittedAnswers, [currentQ._id]: choice.text})}
+                                            checked = {submittedAnswers[currentQ._id] === choice.text}
                                             className="mb-2 fs-5"
                                             type="radio"
                                             label={choice.text}
@@ -97,13 +113,15 @@ export default function TakeQuiz() {
 
                             {quiz?.questions[currentQuestion].question_type === "True/False" && (
                                 <div>
-                                    <FormCheck
+                                    <FormCheck onChange={() => setSubmittedAnswers({...submittedAnswers, [currentQ._id]: "True"})}
+                                        checked = {submittedAnswers[currentQ._id] === "True"}
                                         className="mb-2 fs-5"
                                         type="radio"
                                         label="True"
                                         name={`choice-${currentQuestion}`}>
                                     </FormCheck>   
-                                    <FormCheck
+                                    <FormCheck onChange={() => setSubmittedAnswers({...submittedAnswers, [currentQ._id]: "False"})}
+                                        checked = {submittedAnswers[currentQ._id] === "False"}
                                         className="mb-2 fs-5"
                                         type="radio"
                                         label="False"
@@ -114,7 +132,8 @@ export default function TakeQuiz() {
                             }
 
                             {quiz?.questions[currentQuestion].question_type === "Fill in the Blank" &&
-                                <FormControl
+                                <FormControl onChange={(e) => setSubmittedAnswers({...submittedAnswers, [currentQ._id]: e.target.value})}
+                                    value={submittedAnswers[currentQ._id] ?? ""}
                                     className="mt-4 mb-2 w-50 fs-5">
                                 </FormControl>
                             }

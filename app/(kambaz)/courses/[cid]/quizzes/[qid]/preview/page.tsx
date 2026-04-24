@@ -16,7 +16,9 @@ export default function QuizPreview() {
   const { cid, qid } = useParams();
   const dispatch = useDispatch();
 
-  const [submittedAnswers, setSubmittedAnswers] = useState([]);
+  const [submittedAnswers, setSubmittedAnswers] = useState<{[key: string]: string}>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [totalScore, setTotalScore] = useState(0);
 
   const quiz = useSelector((state: RootState) => state.quizzesReducer.quizzes.find(
     (q : any) => q._id === qid)) as any;
@@ -27,10 +29,41 @@ export default function QuizPreview() {
           const quizzes = await client.findQuizzesForCourse(cid as string);
           dispatch(setQuizzes(quizzes));
     };
+
+    const onSubmit = () => {
+        let curr_points = 0;
+        for (let i = 0; i < quiz.questions.length; i++) {
+            const question = quiz?.questions[i];
+
+            if (question.question_type == "True/False") {
+                const correctAnswer = question.trueFalseAnswer ? "True" : "False";
+                if (submittedAnswers[question._id] === correctAnswer) {
+                    curr_points += question.points;
+                }
+            }
+            else if (question.question_type == "Multiple Choice") {
+                const correctOption = question.multiple_choice.find((c: any) => c.isCorrect);
+                if (submittedAnswers[question._id] === correctOption.text) {
+                    curr_points += question.points;
+                }
+            }
+            else {
+                if (question.blanks.includes(submittedAnswers[question._id])) {
+                    curr_points += question.points;
+                }
+            }
+        }
+
+        setTotalScore(curr_points);
+        setIsSubmitted(true);
+        };
   
+        
   useEffect(() => {
           fetchQuizzes();
     }, []);
+
+    const currentQ = quiz?.questions[currentQuestion];
 
     return (
         <div id="quiz-preview">
@@ -62,8 +95,9 @@ export default function QuizPreview() {
                             <h5 className="mt-4 mb-4">{quiz?.questions[currentQuestion].question}</h5><hr />
 
                             {quiz?.questions[currentQuestion].question_type === "Multiple Choice" &&
-                                quiz?.questions[currentQuestion].multiple_choice?.map((choice: any) => (
-                                        <FormCheck
+                                quiz?.questions[currentQuestion]?.multiple_choice?.map((choice: any) => (
+                                        <FormCheck onChange={() => setSubmittedAnswers({...submittedAnswers, [currentQ._id]: choice.text})}
+                                            checked = {submittedAnswers[currentQ._id] === choice.text}
                                             className="mb-2 fs-5"
                                             type="radio"
                                             label={choice.text}
@@ -74,13 +108,15 @@ export default function QuizPreview() {
 
                             {quiz?.questions[currentQuestion].question_type === "True/False" && (
                                 <div>
-                                    <FormCheck
+                                    <FormCheck onChange={() => setSubmittedAnswers({...submittedAnswers, [currentQ._id]: "True"})}
+                                        checked = {submittedAnswers[currentQ._id] === "True"}
                                         className="mb-2 fs-5"
                                         type="radio"
                                         label="True"
                                         name={`choice-${currentQuestion}`}>
                                     </FormCheck>   
-                                    <FormCheck
+                                    <FormCheck onChange={() => setSubmittedAnswers({...submittedAnswers, [currentQ._id]: "False"})}
+                                        checked = {submittedAnswers[currentQ._id] === "False"}
                                         className="mb-2 fs-5"
                                         type="radio"
                                         label="False"
@@ -91,7 +127,8 @@ export default function QuizPreview() {
                             }
 
                             {quiz?.questions[currentQuestion].question_type === "Fill in the Blank" &&
-                                <FormControl
+                                <FormControl onChange={(e) => setSubmittedAnswers({...submittedAnswers, [currentQ._id]: e.target.value})}
+                                    value={submittedAnswers[currentQ._id] ?? ""}
                                     className="mt-4 mb-2 w-50 fs-5">
                                 </FormControl>
                             }
@@ -127,7 +164,7 @@ export default function QuizPreview() {
                 </div><br />
 
                 <div className="me-5 float-end pb-4">
-                    <Button className="d-flex align-items-center btn btn-lg btn-danger">
+                    <Button className="d-flex align-items-center btn btn-lg btn-danger" onClick={onSubmit}>
                         Submit Quiz
                     </Button>
                 </div>
